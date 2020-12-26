@@ -6,11 +6,12 @@
 
 void createTable()
 {
+    //creates a random table of black and white chess pieces represented 
+    //by lower case and upper case characters respectively on the 8x8 board
+
     char row[9] = {'p','r','n','b','q','k','b','n','r'};
     srand(time(0));
-
     int random = rand()%2;
-
     for (int i = 'A'; i <= 'H'; i++)
     {
         printf("   %c",i);
@@ -68,6 +69,12 @@ void createTable()
             }
             printf("\n");        
         }
-    }
-    
+    }    
 }
+
+// void createTable(int x1,int y1,int x2,int y2,char piece)
+// {
+//     //given two coordinates re creates the table moving the selected piece
+
+
+// }
