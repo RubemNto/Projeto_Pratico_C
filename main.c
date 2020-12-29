@@ -2,8 +2,6 @@
 #include "chess.h"
 #include "fileio.h"
 
-
-
 int main()
 {    
     createTable();
