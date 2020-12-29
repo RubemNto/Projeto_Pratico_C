@@ -23,27 +23,23 @@ void createTable()
         {
             pieces1[i].costume = toupper(costumes[i+1]);
             pieces1[i].posY = b; 
-            pieces1[i].posX = i+1;
+            pieces1[i].posX = 1;
+
+            pieces2[i].costume = costumes[i+1];
+            pieces2[i].posY = b; 
+            pieces2[i].posX = 8;
 
         }else
         {
             pieces1[i].costume = toupper(costumes[0]);
             pieces1[i].posY = b;
+            pieces1[i].posX = 2;
+
+            pieces2[i].costume = costumes[i+1];
+            pieces2[i].posY = b; 
+            pieces2[i].posX = 7;
         }        
     }
-
-    for (int i = 0; i < 16; i++)
-    {
-        if(i<=7)
-        {
-
-        }else
-        {
-            
-        }        
-    }
-    
-
 }
 
 // void createTable()
