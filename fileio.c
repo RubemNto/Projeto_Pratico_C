@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-
+/* 
 void createFile() {
 	FILE* game_state;
 
@@ -19,4 +19,4 @@ void createFile() {
 void writeInFile() {
 
 
-}
+} */
