@@ -27,5 +27,6 @@ void createPlayers(){
         }
               
     } while (!strcmp(players[0].nickname , players[1].nickname)); 
+    //asasdsads
        
 }
