@@ -12,6 +12,8 @@ typedef struct
 
 void createTable()
 {
+    srand(time(0));
+    int random = rand()%2;
     //creates a random table of black and white chess pieces represented 
     //by lower case and upper case characters respectively on the 8x8 board
     piece pieces1[16];
@@ -27,18 +29,79 @@ void createTable()
 
             pieces2[i].costume = costumes[i+1];
             pieces2[i].posY = b; 
-            pieces2[i].posX = 8;
-
+            pieces2[i].posX = 7;
         }else
         {
             pieces1[i].costume = toupper(costumes[0]);
             pieces1[i].posY = b;
             pieces1[i].posX = 2;
 
-            pieces2[i].costume = costumes[i+1];
+            pieces2[i].costume = costumes[0];
             pieces2[i].posY = b; 
-            pieces2[i].posX = 7;
+            pieces2[i].posX = 6;
         }        
+    }
+    printf("   A");
+    for (int i = 'B'; i <= 'H'; i++)
+    {
+        printf("  %c",i);
+    }
+    printf("\n");    
+    if(random == 0)
+    {
+        //upper case top        
+        for (int l = 0; l < 8; l++)//creates lines
+        {
+            printf("%d ", l+1);
+            for (int c = 0; c < 8; c++)//create colums
+            {
+                
+                if(l == 0)
+                {
+                    printf("[%c]",pieces1[c].costume);
+                }else if(l == 1)
+                {
+                    printf("[%c]",pieces1[c+8].costume);
+                }else if(l == 6)
+                {
+                    printf("[%c]",pieces2[c+8].costume);
+                }else if(l == 7)
+                {
+                    printf("[%c]",pieces2[c].costume);
+                }else
+                {
+                    printf("[ ]");
+                }
+            }
+            printf("\n");            
+        }
+    }else
+    {
+        //upper case down
+        for (int l = 0; l < 8; l++)//creates lines
+        {
+            printf("%d ", l+1);
+            for (int c = 0; c < 8; c++)//create colums
+            {
+                if(l == 0)
+                {
+                    printf("[%c]",pieces2[c].costume);
+                }else if(l == 1)
+                {
+                    printf("[%c]",pieces2[c+8].costume);
+                }else if(l == 6)
+                {
+                    printf("[%c]",pieces1[c+8].costume);
+                }else if(l == 7)
+                {
+                    printf("[%c]",pieces1[c].costume);
+                }else
+                {
+                    printf("[ ]");
+                }
+            }
+            printf("\n");    
+        }
     }
 }
 
