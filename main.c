@@ -6,6 +6,7 @@
 int main()
 {    
     createPlayers();
+    setWhite(players);
     createTable();
     return 0;
 }
