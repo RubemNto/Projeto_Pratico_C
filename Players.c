@@ -23,8 +23,14 @@ void createPlayers(){
     {
         for (int i = 0; i < 2; i++)
         {
-            printf("Player %d's Nickname ",(i + 1));
-            gets(players[i].nickname);     
+            do{
+                printf("Player %d's Nickname:  ",(i + 1));
+                gets(players[i].nickname);     
+
+                if(strlen(players[i].nickname) > 12){
+                    printf("Nickname is too long, maximum characters is 12. Please choose a new one! \n");
+                }
+            }while(strlen(players[i].nickname) > 12);
         }
         if (!strcmp(players[0].nickname , players[1].nickname))
         {
@@ -54,13 +60,13 @@ void setWhite(player players[2]){
             players[i] = temp[i];
         }   
         printf(players[0].nickname);
-        printf(" is White and will start the game! \n \n");
+        printf(" is White and will start the game! \n \n ");
         printf(players[1].nickname);
         printf(" is Black and will go second! \n \n");       
     }
     else{ //ELSE ALL REMAINS THE SAME AND INITIAL PLAYER[0] STARTS
         printf(players[0].nickname);
-        printf(" is Whites and will start the game! \n \n");
+        printf(" is Whites and will start the game! \n \n ");
         printf(players[1].nickname);
         printf(" is Blacks and will go second! \n \n");  
     }
@@ -70,7 +76,7 @@ void setWhite(player players[2]){
 //                                         GAMEPLAY                                                               //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void gameCourse(){
+/* void gameCourse(){
 
     do
     {
@@ -105,7 +111,7 @@ void makePlay(player player){
 
 
 
-
+ */
 
 
 
