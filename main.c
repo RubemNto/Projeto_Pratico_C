@@ -8,6 +8,6 @@ int main()
     createPlayers();
     setWhite(players);
     createTable();
-    createFile();
+    fileManipulation();
     return 0;
 }

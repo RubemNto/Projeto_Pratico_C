@@ -59,6 +59,7 @@ void setWhite(player players[2]){
         {
             players[i] = temp[i];
         }   
+        printf("\n ");
         printf(players[0].nickname);
         printf(" is White and will start the game! \n \n ");
         printf(players[1].nickname);
