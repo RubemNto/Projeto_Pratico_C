@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include "chess.h"
-#include "fileio.h"
-#include "Players.c"
 
-int main()
-{    
-    createPlayers();
-    setWhite(players);
+int main(void)
+{
     createTable();
-    createFile();
+    //writeCoordinatesOfPieces();
+    movePiece(true);
+    //reCreateTable();
+    //writeCoordinatesOfPieces();
     return 0;
 }
