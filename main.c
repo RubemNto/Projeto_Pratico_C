@@ -4,9 +4,6 @@
 int main(void)
 {
     createTable();
-    //writeCoordinatesOfPieces();
     movePiece(true);
-    //reCreateTable();
-    //writeCoordinatesOfPieces();
     return 0;
 }
