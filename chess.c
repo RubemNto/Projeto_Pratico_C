@@ -203,28 +203,31 @@ void movePiece(bool whiteTurn)
         printf("<<Blacks turn>>\n");
     }
         
-    // while(selectedPieceCostume == ' ')
-    // {
-        while(posX <= 0 || posX > 8)//choose a line form the table
+// while(selectedPieceCostume == ' ')
+// {
+    while(posX <= 0 || posX > 8)//choose a line form the table
+    {
+        printf("Select piece\n");
+        printf("Line of the Piece: ");
+        scanf("%d",&posX);
+        if(posX <= 0 || posX > 8)//if the choice is outside of the table, teel the player that he is out of bounds
         {
-            printf("Select piece\n");
-            printf("Line of the Piece: ");
-            scanf("%d",&posX);
-            if(posX <= 0 || posX > 8)//if the choice is outside of the table, teel the player that he is out of bounds
-            {
-                printf("Outside of the table\nWrite a valid number from the table!\n");
-            }
+            printf("Outside of the table\nWrite a valid number from the table!\n");
+            printf("Here1");
         }
-        while(posY <= 0 || posY > 'H')//choose a column from the table
+    }
+
+    while(posY <= 0 || posY > 'H')//choose a column from the table
+    {
+        printf("Column of the Piece: ");
+        scanf("%d",&posY);
+        posY = toupper(posY);
+        if(posY <= 64 || posY > 'H')//if the choice is outside of the table, teel the player that he is out of bounds
         {
-            printf("Column of the Piece: ");
-            scanf("%d",&posY);
-            posY = toupper(posY);
-            if(posY <= 0 || posY > 'H')//if the choice is outside of the table, teel the player that he is out of bounds
-            {
-                printf("Outside of the table\nWrite a valid Column from the table!\n");
-            }
+            printf("Outside of the table\nWrite a valid Column from the table!\n");
+            printf("Here2");
         }
+    }
         // for (int i = 0; i < 16; i++)
         // {
         //     if(pieces1[i].posX == posX && pieces1[i].posY == posY)
