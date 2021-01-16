@@ -9,10 +9,9 @@ int main(void)
     createTable();
     while(playing)
     {
-        //writeCoordinatesOfPieces();
         movePiece(turn);
         turn = !turn;
-    }
-    //writeRandom();
+        //checkKing(turn)
+    }    
     return 0;
 }
