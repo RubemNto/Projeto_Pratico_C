@@ -82,15 +82,15 @@ void setWhite(player players[2]){
     do
     {
         makePlay(players[0]);
-        tableUpdate();
+        reCreateTable();
         makePlay(players[1]);
-        tableUpdate();
+        reCreateTable();
 
          // -----OR----- //
         makePlayWhite();
-        tableUpdate();
+        reCreateTable();
         makePlayBlack();
-        tableUpdate();
+        reCreateTable();
 
     } while (!gameEnded());
     

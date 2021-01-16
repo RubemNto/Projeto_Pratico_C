@@ -7,8 +7,9 @@
 #include <stdbool.h>
 #include <math.h>
 
-piece pieces1[16];
-piece pieces2[16];
+piece pieces1[16];//brancos
+piece pieces2[16];//pretos
+bool turn;
 
 int random;
 void writeRandom()
@@ -190,9 +191,11 @@ void reCreateTable()
 void movePiece(bool whiteTurn)
 {
     int posX = 0;//select piece line
-    int posY = 0;//select piece column
+    char posY = 0;//select piece column
     char selectedPieceCostume = ' ';
+    char answer = 0;
     piece selectedPiece;
+    bool choose = false;
     //select piece
     //receive coordinates from the table and verify if exists in the table
     if(whiteTurn == true)
@@ -203,173 +206,193 @@ void movePiece(bool whiteTurn)
         printf("<<Blacks turn>>\n");
     }
         
-// while(selectedPieceCostume == ' ')
-// {
-    while(posX <= 0 || posX > 8)//choose a line form the table
+    while(selectedPieceCostume == ' ' && choose == false)
     {
-        printf("Select piece\n");
-        printf("Line of the Piece: ");
-        scanf("%d",&posX);
-        if(posX <= 0 || posX > 8)//if the choice is outside of the table, teel the player that he is out of bounds
+        //choose a line form the table
+        do
         {
-            printf("Outside of the table\nWrite a valid number from the table!\n");
-            printf("Here1");
-        }
-    }
+            printf("Select piece\n");
+            printf("Line of the Piece: ");
+            scanf("%d",&posX);
+            if(posX <= 0 || posX > 8)//if the choice is outside of the table, teel the player that he is out of bounds
+            {
+                printf("Outside of the table\nWrite a valid number from the table!\n");
+            }
+        }while(posX <= 0 || posX > 8);
 
-    while(posY <= 0 || posY > 'H')//choose a column from the table
-    {
-        printf("Column of the Piece: ");
-        scanf("%d",&posY);
-        posY = toupper(posY);
-        if(posY <= 64 || posY > 'H')//if the choice is outside of the table, teel the player that he is out of bounds
+        do
         {
-            printf("Outside of the table\nWrite a valid Column from the table!\n");
-            printf("Here2");
+            printf("Column of the Piece: ");
+            scanf(" %c",&posY);
+            posY = toupper(posY);
+            if(posY < 'A' || posY > 'H')//if the choice is outside of the table, teel the player that he is out of bounds
+            {
+                printf("Outside of the table\nWrite a valid Column from the table!\n");
+            }
+        }while(posY < 'A' || posY > 'H');
+        
+        for (int i = 0; i < 16; i++)
+        {
+            if(pieces1[i].posX == posX && pieces1[i].posY == posY)
+            {
+                selectedPieceCostume = pieces1[i].costume;
+                // selectedPiece.costume = pieces1[i].costume;
+                // selectedPiece.posX = posX;
+                // selectedPiece.posY = posY;
+                break;
+            }else if(pieces2[i].posX == posX && pieces2[i].posY == posY)
+            {
+                selectedPieceCostume = pieces2[i].costume;
+                // selectedPiece.costume = pieces2[i].costume;
+                // selectedPiece.posX = posX;
+                // selectedPiece.posY = posY;
+                break;
+            }
         }
+        if(selectedPieceCostume == ' ')//if player selects a blank space
+        {
+            printf("Blank space, select a valid piece");
+            selectedPieceCostume = ' ';
+            posX = 0;
+            posY=0;
+            continue;
+        }else if(whiteTurn == true && selectedPieceCostume != toupper(selectedPieceCostume))//if player selects a piece form the opponent
+        {
+            printf("Opponent piece selected, choose one of your own!\n");
+            selectedPieceCostume = ' ';
+            posX = 0;
+            posY=0;
+            continue;
+        }else if(whiteTurn == false && selectedPieceCostume == toupper(selectedPieceCostume))//if player selects a piece form the opponent
+        {
+            printf("Opponent piece selected, choose one of your own!\n");
+            selectedPieceCostume = ' ';
+            posX = 0;
+            posY=0;
+            continue;
+        }
+        
+        do{
+            printf("Selected Piece %c(%d,%c)\nDo you wish to switch(Y/N)?",selectedPieceCostume,posX,posY);
+            scanf(" %c",&answer);
+            answer = toupper(answer);
+            //printf("%c",answer);
+            if(answer == 'Y')
+            {
+                choose = false;
+                selectedPieceCostume = ' ';
+                posX = 0;
+                posY = 0;
+                continue;
+            }else if(answer == 'N')
+            {
+                choose = true;
+                selectedPiece.costume = selectedPieceCostume;
+                selectedPiece.posX = posX;
+                selectedPiece.posY = posY;                
+            }
+        }while(answer != 'Y' && answer != 'N');
+
     }
-        // for (int i = 0; i < 16; i++)
-        // {
-        //     if(pieces1[i].posX == posX && pieces1[i].posY == posY)
-        //     {
-        //         selectedPieceCostume = pieces1[i].costume;
-        //         break;
-        //     }else if(pieces2[i].posX == posX && pieces2[i].posY == posY)
-        //     {
-        //         selectedPieceCostume = pieces2[i].costume;
-        //         break;
-        //     }
-        // }
-        // if(selectedPieceCostume == ' ')//if player selects a blank space
-        // {
-        //     printf("Blank space, select a valid piece");
-        //     selectedPieceCostume = ' ';
-        //     posX = 0;
-        //     posY=0;
-        // }else if(whiteTurn == true && selectedPieceCostume != toupper(selectedPieceCostume))//if player selects a piece form the opponent
-        // {
-        //     printf("Opponent piece selected, choose one of your own!\n");
-        //     selectedPieceCostume = ' ';
-        //     posX = 0;
-        //     posY=0;
-        // }else if(whiteTurn == false && selectedPieceCostume == toupper(selectedPieceCostume))//if player selects a piece form the opponent
-        // {
-        //     printf("Opponent piece selected, choose one of your own!\n");
-        //     selectedPieceCostume = ' ';
-        //     posX = 0;
-        //     posY=0;
-        // }
-    //}
-    // for (int i = 0; i < 16; i++)//Select the piece from the board given the data received
-    // {
-    //     if(pieces1[i].posX == posX && pieces1[i].posY == posY && pieces1[i].costume == selectedPieceCostume)
-    //     {
-    //         selectedPiece = pieces1[i];
-    //         break;
-    //     }else if(pieces2[i].posX == posX && pieces2[i].posY == posY && pieces2[i].costume == selectedPieceCostume)
-    //     {
-    //         selectedPiece = pieces2[i];
-    //         break;
-    //     }        
-    // }
+    printf("Selected Piece %c %d %c\n",selectedPiece.costume,selectedPiece.posX,selectedPiece.posY);
     
     //show possible coordinates
         //given the costume of the piece, show the positions allowed
     /*'p','r','n','b','q','k','b','n','r'*/
-    // posX = 0;//select new line to move
-    // posY = 0;//select new column to move
+    posX = 0;//select new line to move
+    posY = 0;//select new column to move
     
-    //     if(selectedPiece.costume == 'p' || selectedPiece.costume == 'P')
-    //     {
-    //         //-> move forawrd only once
-    //         //write available spaces
-    //         int availablePositions[2] = {0};
-    //         availablePositions[0] = selectedPiece.posX + 1;
-    //         availablePositions[1] = selectedPiece.posY;
-    //         printf("Available spaces for movement:\n -> %d %c",availablePositions[0],availablePositions[1]);
-    //         //get position inputed by player
-    //         //change piece position on the board
+        if(selectedPiece.costume == 'p' || selectedPiece.costume == 'P')
+        {
+            //-> move forawrd only once
+            //write available spaces
+            int availablePositions[2] = {0};
+            availablePositions[0] = selectedPiece.posX + 1;
+            availablePositions[1] = selectedPiece.posY;
+            printf("Available spaces for movement:\n -> %d %c",availablePositions[0],availablePositions[1]);
+            //get position inputed by player
+            //change piece position on the board
 
-    //     }else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')
-    //     {
-    //         //-> move forward or sideways as much as needed
-    //         int availableLines[7] = {0};//vertical
-    //         int availableColums[7] = {0};//herizontal
-    //         if(selectedPiece.posX == 1)
-    //         {
-    //             for (int i = 0; i < 7; i++)
-    //             {
-    //                 availableLines[i] = i+2;
-    //             }                
-    //         }
-    //         else if(selectedPiece.posX == 8)
-    //         {
-    //             for (int i = 6; i >= 0; i--)
-    //             {
-    //                 availableLines[i] = i+1;
-    //             }
-    //         }
-    //         else if(selectedPiece.posX > 1 && selectedPiece.posX < 8)
-    //         {
-    //             int down = selectedPiece.posX - 1;
-    //             //int up = 8 - selectedPiece.posX;
-    //             int p = 0;
-    //             for (int i = down; i > 0; i--,p++)
-    //             {
-    //                 availableLines[p] = i;
-    //             }
-    //             for (int i = selectedPiece.posX+1; i <= 8; i++,p++)
-    //             {
-    //                 availableLines[p] = i;
-    //             }                
-    //         }
+        }else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')
+        {
+            //-> move forward or sideways as much as needed
+            int availableLines[7] = {0};//vertical
+            int availableColums[7] = {0};//herizontal
+            if(selectedPiece.posX == 1)
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    availableLines[i] = i+2;
+                }                
+            }
+            else if(selectedPiece.posX == 8)
+            {
+                for (int i = 6; i >= 0; i--)
+                {
+                    availableLines[i] = i+1;
+                }
+            }
+            else if(selectedPiece.posX > 1 && selectedPiece.posX < 8)
+            {
+                int down = selectedPiece.posX - 1;
+                //int up = 8 - selectedPiece.posX;
+                int p = 0;
+                for (int i = down; i > 0; i--,p++)
+                {
+                    availableLines[p] = i;
+                }
+                for (int i = selectedPiece.posX+1; i <= 8; i++,p++)
+                {
+                    availableLines[p] = i;
+                }                
+            }
             
-    //         if(selectedPiece.posY == 'A')
-    //         {
-    //             for (int i = 0; i < 7; i++)
-    //             {
-    //                 availableColums[i] = selectedPiece.posY+1;
-    //             }
+            if(selectedPiece.posY == 'A')
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    availableColums[i] = selectedPiece.posY+1;
+                }
                 
-    //         }
-    //         else if(selectedPiece.posY == 'H')
-    //         {
-    //             for (int i = 0,c = 'A'; i < 7; i++,c++)
-    //             {
-    //                 availableColums[i] = c;
-    //             }
+            }
+            else if(selectedPiece.posY == 'H')
+            {
+                for (int i = 0,c = 'A'; i < 7; i++,c++)
+                {
+                    availableColums[i] = c;
+                }
                 
-    //         }
-    //         else if(selectedPiece.posY > 'A' && selectedPiece.posY < 'H')
-    //         {
-    //             int down = selectedPiece.posY - 'A';
-    //             int p = 0;
-    //             for (int i = down; i >= 0; i--,p++)
-    //             {
-    //                 availableColums[p] = i;
-    //             }
-    //             for (int i = selectedPiece.posY+1; i <= 'H'; i++,p++)
-    //             {
-    //                 availableColums[p] = i;
-    //             }
-    //         }
+            }
+            else if(selectedPiece.posY > 'A' && selectedPiece.posY < 'H')
+            {
+                int down = selectedPiece.posY - 'A';
+                int p = 0;
+                for (int i = down; i >= 0; i--,p++)
+                {
+                    availableColums[p] = i;
+                }
+                for (int i = selectedPiece.posY+1; i <= 'H'; i++,p++)
+                {
+                    availableColums[p] = i;
+                }
+            }
             
 
-    //     }else if(selectedPiece.costume == 'n' || selectedPiece.costume == 'N')
-    //     {
-    //         //-> move in L chape   
-    //     }else if(selectedPiece.costume == 'b' || selectedPiece.costume == 'B')
-    //     {
-    //         //-> moves diagonaly
-    //     }else if(selectedPiece.costume == 'q' || selectedPiece.costume == 'Q')
-    //     {
-    //         //-> moves at any direction as many spaces as needed
-    //     }else if(selectedPiece.costume == 'k' || selectedPiece.costume == 'K')
-    //     {
-    //         //-> moves at any direction only once
-    //     }
+        }else if(selectedPiece.costume == 'n' || selectedPiece.costume == 'N')
+        {
+            //-> move in L chape   
+        }else if(selectedPiece.costume == 'b' || selectedPiece.costume == 'B')
+        {
+            //-> moves diagonaly
+        }else if(selectedPiece.costume == 'q' || selectedPiece.costume == 'Q')
+        {
+            //-> moves at any direction as many spaces as needed
+        }else if(selectedPiece.costume == 'k' || selectedPiece.costume == 'K')
+        {
+            //-> moves at any direction only once
+        }
     
-    
+}    
 
 
 
@@ -379,7 +402,7 @@ void movePiece(bool whiteTurn)
     //check if they are equal to any piece of the opponent
         //check every piece of the opponent, if any of them have the same as the players added coordinates, the costume is " "
     //recreate table
-}
+
 // // void createTable()
 // // {
 // //     //creates a random table of black and white chess pieces represented 
