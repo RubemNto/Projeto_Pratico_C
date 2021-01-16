@@ -5,6 +5,7 @@
 #include <time.h>
 #include "chess.h"
 #include <stdbool.h>
+#include <conio.h>
 #include <math.h>
 
 piece pieces1[16];//brancos
@@ -156,6 +157,7 @@ void createTable()
 
 void reCreateTable()
 {
+    system("cls");
     printf("   A");
     for (int i = 'B'; i <= 'H'; i++)
     {
@@ -190,6 +192,7 @@ void reCreateTable()
 
 void movePiece(bool whiteTurn)
 {
+    int index = 0;
     int posX = 0;//select piece line
     char posY = 0;//select piece column
     char selectedPieceCostume = ' ';
@@ -294,7 +297,29 @@ void movePiece(bool whiteTurn)
         }while(answer != 'Y' && answer != 'N');
 
     }
-    printf("Selected Piece %c %d %c\n",selectedPiece.costume,selectedPiece.posX,selectedPiece.posY);
+    for (int i = 0; i < 16; i++)
+    {
+        if(whiteTurn == true)
+        {
+            if(selectedPiece.costume == pieces1[i].costume && selectedPiece.posX == pieces1[i].posX && selectedPiece.posY == pieces1[i].posY)
+            {
+                index = i;
+                //pieces1[i] = selectedPiece;
+                //printf("Selected Piece %c %d %c\n",pieces1[i].costume,pieces1[i].posX,pieces1[i].posY);    
+                break;
+            }
+        }else if(whiteTurn == false)
+        {
+            if(selectedPiece.costume == pieces2[i].costume && selectedPiece.posX == pieces2[i].posX && selectedPiece.posY == pieces2[i].posY)
+            {
+                //pieces2[i] = selectedPiece;
+                //printf("Selected Piece %c %d %c\n",pieces2[i].costume,pieces2[i].posX,pieces2[i].posY);
+                index = i;    
+                break;
+            }
+        }                
+    }
+    printf("Selected Piece Index(%d) %c(%d,%c)\n",index,selectedPiece.costume,selectedPiece.posX,selectedPiece.posY);
     
     //show possible coordinates
         //given the costume of the piece, show the positions allowed
@@ -307,13 +332,73 @@ void movePiece(bool whiteTurn)
             //-> move forawrd only once
             //write available spaces
             int availablePositions[2] = {0};
-            availablePositions[0] = selectedPiece.posX + 1;
-            availablePositions[1] = selectedPiece.posY;
-            printf("Available spaces for movement:\n -> %d %c",availablePositions[0],availablePositions[1]);
+            if(random == 0 && whiteTurn == true)
+            {
+                availablePositions[0] = selectedPiece.posX + 1;
+                availablePositions[1] = selectedPiece.posY;
+            }else if(random == 0 && whiteTurn == false)
+            {
+                availablePositions[0] = selectedPiece.posX - 1;
+                availablePositions[1] = selectedPiece.posY;
+            }else if(random == 1 && whiteTurn == true)
+            {
+                availablePositions[0] = selectedPiece.posX - 1;
+                availablePositions[1] = selectedPiece.posY;
+            }else if(random == 1 && whiteTurn == false)
+            {
+                availablePositions[0] = selectedPiece.posX + 1;
+                availablePositions[1] = selectedPiece.posY;
+            }
+            printf("Available spaces for movement:\n -> %d %c\n",availablePositions[0],availablePositions[1]);
             //get position inputed by player
+            do
+            {
+                printf("Select Line:");
+                scanf("%d",&posX);
+                for (int i = 1; i < sizeof availablePositions /sizeof availablePositions[0]; i+=2)
+                {
+                    if(posX == availablePositions[i])
+                    {
+                        break;
+                    }                    
+                }                
+                if(posX <= 0 || posX > 8)//if the choice is outside of the table, teel the player that he is out of bounds
+                {
+                    printf("Not available line for movement!\n");
+                }
+            }while(posX <= 0 || posX > 8);
+
+            do
+            {
+                printf("Select column:");
+                scanf(" %c",&posY);
+                posY = toupper(posY);
+                for (int i = 0; i < sizeof availablePositions /sizeof availablePositions[0]; i+=2)
+                {
+                    if(posY == availablePositions[i])
+                    {
+                        break;
+                    }                    
+                } 
+                if(posY < 'A' || posY > 'H')//if the choice is outside of the table, teel the player that he is out of bounds
+                {
+                    printf("Not available column for movement!\n");
+                }
+            }while(posY < 'A' || posY > 'H');
+            if(whiteTurn == true)
+            {
+                pieces1[index].posX = posX;
+                pieces1[index].posY = posY;
+            }else
+            {
+                pieces2[index].posX = posX;
+                pieces2[index].posY = posY;
+            }                                
+            reCreateTable();
             //change piece position on the board
 
-        }else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')
+        }
+        else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')
         {
             //-> move forward or sideways as much as needed
             int availableLines[7] = {0};//vertical
@@ -378,16 +463,20 @@ void movePiece(bool whiteTurn)
             }
             
 
-        }else if(selectedPiece.costume == 'n' || selectedPiece.costume == 'N')
+        }
+        else if(selectedPiece.costume == 'n' || selectedPiece.costume == 'N')
         {
             //-> move in L chape   
-        }else if(selectedPiece.costume == 'b' || selectedPiece.costume == 'B')
+        }
+        else if(selectedPiece.costume == 'b' || selectedPiece.costume == 'B')
         {
             //-> moves diagonaly
-        }else if(selectedPiece.costume == 'q' || selectedPiece.costume == 'Q')
+        }
+        else if(selectedPiece.costume == 'q' || selectedPiece.costume == 'Q')
         {
             //-> moves at any direction as many spaces as needed
-        }else if(selectedPiece.costume == 'k' || selectedPiece.costume == 'K')
+        }
+        else if(selectedPiece.costume == 'k' || selectedPiece.costume == 'K')
         {
             //-> moves at any direction only once
         }
