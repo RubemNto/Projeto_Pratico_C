@@ -8,10 +8,11 @@
 
 
 //------------- Individual Player Struct - Defines PlayerName  ------------------//
-  typedef struct
+typedef struct
 {
     char nickname[12];
 }player;
+
 player players[2];     // Creates an array where the 2 players in the game will be stored and manipulated
 
   
