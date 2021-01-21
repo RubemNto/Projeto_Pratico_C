@@ -7,8 +7,8 @@ int main(void)
 {
     bool playing = true;
     bool turn = true;
-    createPlayers();
-    setWhite();    
+    // createPlayers();
+    // setWhite();    
     createTable();
     while(playing)
     {

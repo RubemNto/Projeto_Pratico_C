@@ -19,4 +19,5 @@ void movePiece(bool whiteTurn);
 
 void createPlayers();
 void setWhite();
+void checkGame();
 
