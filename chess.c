@@ -702,12 +702,157 @@ void movePiece(bool whiteTurn)
                     pieces2[index].posX = posX;
                     pieces2[index].posY = posY;
                 }
+                reCreateTable();
             }
-            reCreateTable();
+            else
+            {
+                reCreateTable();
+            }
+            
+            
             
         }
         else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')
         {
+            int diferenceTop = selectedPiece.posX - 1;
+            int diferenceRight = 'H' - selectedPiece.posY;
+            int diferenceBottom = 8 - selectedPiece.posX;
+            int diferenceLeft = selectedPiece.posY - 'A';
+            int availablePositions[14][2] = {0};
+            int index = 0;
+            bool foundPiece = false;
+
+            for(int i = 0; i<diferenceTop;i++)//positions on top of tower
+            {
+                for(int p = 0;p < 16;p++)
+                {
+                    if(whiteTurn == true)
+                    {
+                        if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY)
+                        {
+                            foundPiece = true;
+                            availablePositions[i][0] = 0;
+                            availablePositions[i][1] = 0;
+                            printf("Found a piece 1 top\n\n");
+                            index++;
+                        }
+                        else if(foundPiece == false)
+                        {
+                            availablePositions[i][0] = selectedPiece.posX-(i+1);
+                            availablePositions[i][1] = selectedPiece.posY;
+                            printf("cant come up here 1\n\n");
+                            index++;
+                        }
+                    }else if(whiteTurn == false)
+                    {
+                        if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY)
+                        {
+                            foundPiece = true;
+                            availablePositions[i][0] = 0;
+                            availablePositions[i][1] = 0;
+                            printf("Found a piece 2 top\n\n");
+                            index++;
+                        }
+                        else if(foundPiece == false)
+                        {
+                            availablePositions[i][0] = selectedPiece.posX-(i+1);
+                            availablePositions[i][1] = selectedPiece.posY;
+                            printf("cant come up here 2\n\n");
+                            index++;
+                        }
+                    }                    
+                }
+            }
+            printf("%d\n\n",index);
+            for(int i = index; i<diferenceBottom+index;i++)//positions on bottom of tower
+            {
+                for(int p = 0;p < 16;p++)
+                {
+                    if(whiteTurn == true)
+                    {
+                        if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY)
+                        {
+                            foundPiece = true;
+                            availablePositions[i][0] = 0;
+                            availablePositions[i][1] = 0;
+                            printf("Found a piece 1 bottom\n\n");
+                            index++;
+                        }
+                        else if(foundPiece == false)
+                        {
+                            availablePositions[i][0] = selectedPiece.posX+(i+1);
+                            availablePositions[i][1] = selectedPiece.posY;
+                            printf("cant come down here 1\n\n");
+                            index++;
+                        }
+                    }else if(whiteTurn == false)
+                    {
+                        if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY)
+                        {
+                            foundPiece = true;
+                            availablePositions[i][0] = 0;
+                            availablePositions[i][1] = 0;
+                            printf("Found a piece 2 bottom\n\n");
+                            index++;
+                        }
+                        else if(foundPiece == false)
+                        {
+                            availablePositions[i][0] = selectedPiece.posX+(i+1);
+                            availablePositions[i][1] = selectedPiece.posY;
+                            printf("cant come down here 2\n\n");
+                            index++;
+                        }
+                    }        
+                }
+            }
+            
+            for(int i = index; i<diferenceRight+index;i++)//positions on bottom of tower
+            {
+                for(int p = 0;p < 16;p++)
+                {
+                    if(whiteTurn == true)
+                    {
+                        if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY+(i+1))
+                        {
+                            foundPiece = true;
+                            availablePositions[i][0] = 0;
+                            availablePositions[i][1] = 0;
+                            printf("Found a piece 1 bottom\n\n");
+                            index++;
+                        }
+                        else if(foundPiece == false)
+                        {
+                            availablePositions[i][0] = selectedPiece.posX+(i+1);
+                            availablePositions[i][1] = selectedPiece.posY;
+                            printf("cant come down here 1\n\n");
+                            index++;
+                        }
+                    }else if(whiteTurn == false)
+                    {
+                        if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY)
+                        {
+                            foundPiece = true;
+                            availablePositions[i][0] = 0;
+                            availablePositions[i][1] = 0;
+                            printf("Found a piece 2 bottom\n\n");
+                            index++;
+                        }
+                        else if(foundPiece == false)
+                        {
+                            availablePositions[i][0] = selectedPiece.posX+(i+1);
+                            availablePositions[i][1] = selectedPiece.posY;
+                            printf("cant come down here 2\n\n");
+                            index++;
+                        }
+                    }        
+                }
+            }
+            for(int i = 0;i<14;i++)
+            {
+                printf("%d %c\n",availablePositions[i][0],availablePositions[i][1]);
+            }
+
+
 
             //-> move forward or sideways as much as needed
             // int availableLines[14] = {0};//vertical
@@ -997,89 +1142,3 @@ void movePiece(bool whiteTurn)
 
 
     
-    //check coordinates added by player
-        //if the player gives a coordinate that is not allowed, keep asking for one allowed
-    //check if they are equal to any piece of the opponent
-        //check every piece of the opponent, if any of them have the same as the players added coordinates, the costume is " "
-    //recreate table
-
-// // void createTable()
-// // {
-// //     //creates a random table of black and white chess pieces represented 
-// //     //by lower case and upper case characters respectively on the 8x8 board
-// //     piece pieces[32];
-// //     char costumes[9] = {'p','r','n','b','q','k','b','n','r'};
-// //     srand(time(0));
-// //     int random = rand()%2;
-// //     for (int i = 'A'; i <= 'H'; i++)
-// //     {
-// //         printf("   %c",i);
-// //     }
-// //     printf("\n");
-// //     if(random == 0)
-// //     {    
-// //         for (int l = 0; l < 8; l++)
-// //         {
-// //             printf("%d ",l+1);
-// //             for (int i = 0,b ='A'; i < 8; i++,b++)
-// //             {
-// //                 if(l+1 == 1)
-// //                 {
-// //                     pieces[i+1].costume = costumes[i+1];
-// //                     pieces[i+1].posX = l+1;
-// //                     pieces[i+1].posY = b;
-// //                     printf(" [%c]",costumes[i+1]);
-// //                 }else if(l+1 == 2)
-// //                 {
-// //                     pieces[0].costume = costumes[0];
-// //                     pieces[i+1].posX = l+1;
-// //                     pieces[i+1].posY = b;
-// //                     printf(" [%c]",costumes[0]);                    
-// //                 }else if(l+1 == 7)
-// //                 {
-// //                     printf(" [%c]",toupper(costumes[0]));
-// //                 }else if(l+1 == 8)
-// //                 {
-// //                     printf(" [%c]",toupper(costumes[i+1]));
-// //                 }else
-// //                 {
-// //                     printf(" [ ]");
-// //                 }                        
-// //             }
-// //             printf("\n");        
-// //         }
-// //     }else
-// //     {
-// //         for (int l = 0; l < 8; l++)
-// //         {
-// //             printf("%d ",l+1);
-// //             for (int i = 0; i < 8; i++)
-// //             {
-// //                 if(l+1 == 1)
-// //                 {
-// //                     printf(" [%c]",toupper(costumes[i+1]));
-// //                 }else if(l+1 == 2)
-// //                 {
-// //                     printf(" [%c]",toupper(costumes[0]));
-// //                 }else if(l+1 == 7)
-// //                 {
-// //                     printf(" [%c]",costumes[0]);
-// //                 }else if(l+1 == 8)
-// //                 {
-// //                     printf(" [%c]",costumes[i+1]);
-// //                 }else
-// //                 {
-// //                     printf(" [ ]");
-// //                 }                        
-// //             }
-// //             printf("\n");        
-// //         }
-// //     }    
-// // }
-
-// // void createTable(int x1,int y1,int x2,int y2,char piece)
-// // {
-// //     //given two coordinates re creates the table moving the selected piece
-
-
-// }
