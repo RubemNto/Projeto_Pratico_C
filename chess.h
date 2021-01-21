@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdlib.h>
 
 typedef struct
 {
@@ -14,8 +15,9 @@ typedef struct
 void createTable();
 void reCreateTable();
 void writeRandom();
-void writeCoordinatesOfPieces();
-void movePiece(bool whiteTurn);
+void writeCoordinatesOfPieces(FILE *savedData);
+void writePlayerTurn(FILE *savedData);
+void movePiece();
 
 void createPlayers();
 void setWhite();

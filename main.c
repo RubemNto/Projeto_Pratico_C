@@ -2,18 +2,18 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "chess.h"
+#include "fileio.h"
 
 int main(void)
 {
     bool playing = true;
-    bool turn = true;
     // createPlayers();
     // setWhite();    
     createTable();
     while(playing)
     {
-        movePiece(turn);
-        turn = !turn;
+        movePiece();
+        saveGame();
         //checkKing(turn)
     }    
     return 0;

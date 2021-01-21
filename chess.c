@@ -12,7 +12,7 @@ piece pieces1[16];//brancos
 piece pieces2[16];//pretos
 
 player players[2];
-bool turn;
+bool whiteTurn = true;
 bool winW,winB;
 
 int random;
@@ -21,20 +21,29 @@ void writeRandom()
     printf("%d",random);
 }
 
-void writeCoordinatesOfPieces()
+void writeCoordinatesOfPieces(FILE *savedData)
 {
     for (int i = 0; i < 16; i++)
     {
-        printf("%c %d %c",pieces1[i].costume,pieces1[i].posX,pieces1[i].posY);
-        printf("\n");
+        fprintf(&*savedData,"%c %d %c\n",pieces1[i].costume,pieces1[i].posX,pieces1[i].posY);
+        // fprintf("%c %d %c",pieces1[i].costume,pieces1[i].posX,pieces1[i].posY);
+        // fprintf("\n");
     }
-    printf("\n");
+    fprintf(&*savedData,"\n");
     for (int i = 0; i < 16; i++)
     {
-        printf("%c %d %c",pieces2[i].costume,pieces2[i].posX,pieces2[i].posY);
-        printf("\n");
+        fprintf(&*savedData,"%c %d %c\n",pieces2[i].costume,pieces2[i].posX,pieces2[i].posY);
+        // fprintf("%c %d %c",pieces2[i].costume,pieces2[i].posX,pieces2[i].posY);
+        // fprintf("\n");
     }
+    fprintf(&*savedData,"\n");
 }
+
+void writePlayerTurn(FILE *savedData)
+{
+    fprintf(&*savedData,"%d",whiteTurn);
+}
+
 
 void createPlayers(){
                             //CYCLE TO REQUEST FOR PLAYER'S NICKNAME AND STORE IT IN """THE PLAYERSLIST"""
@@ -283,7 +292,7 @@ void reCreateTable()
     }    
 }
 
-void movePiece(bool whiteTurn)
+void movePiece()
 {
     int index = 0;
     int posX = 0;//select piece line
@@ -424,7 +433,7 @@ void movePiece(bool whiteTurn)
             //write available spaces
             int availablePositionsAttack[4] ={0};
             int availablePositions[2] = {0};
-            int enemyIndex1,enemyIndex2;
+            int enemyIndex1 = 0,enemyIndex2 = 0;
             if(random == 0 && whiteTurn == true)
             {
                 availablePositions[0] = selectedPiece.posX + 1;
@@ -537,7 +546,7 @@ void movePiece(bool whiteTurn)
                 bool found1,found2;//found eatable pieces;
                 bool found3 = false;//found forward enemy or ally piece 
 
-                for(int i = 0; i< sizeof pieces2/sizeof pieces2[0];i++)
+                for(int i = 0; i < sizeof pieces2/sizeof pieces2[0];i++)
                 {
 
                     if((pieces2[i].posX == availablePositions[0] && pieces2[i].posY == availablePositions[1]) || (pieces1[i].posX == availablePositions[0] && pieces1[i].posY == availablePositions[1]))
@@ -625,27 +634,31 @@ void movePiece(bool whiteTurn)
             //get position inputed by player
             if(!(availablePositions[0] == 0 && availablePositions[1] == 0) || !(availablePositionsAttack[0] == 0 && availablePositionsAttack[1] == 0) || !(availablePositionsAttack[2] == 0 && availablePositionsAttack[3] == 0))
             {
+                bool checkPosX= false;
+                bool checkPosY= false;
                 do
                 {
                     printf("Select Line:");
                     scanf("%d",&posX);
-                    for (int i = 1; i < sizeof availablePositions /sizeof availablePositions[0]; i+=2)
+                    for (int i = 0; i < sizeof availablePositions /sizeof availablePositions[0]; i+=2)
                     {
                         if(posX == availablePositions[i])
                         {
+                            checkPosX = true;
                             break;
                         }                    
                     }     
 
-                    for (int i = 1; i < sizeof availablePositionsAttack /sizeof availablePositionsAttack[0]; i+=2)
+                    for (int i = 0; i < sizeof availablePositionsAttack /sizeof availablePositionsAttack[0]; i+=2)
                     {
                         if(posX == availablePositionsAttack[i])
                         {
+                            checkPosX = true;
                             break;
                         }                    
                     }
 
-                    if(posX <= 0 || posX > 8)//if the choice is outside of the table, teel the player that he is out of bounds
+                    if(posX <= 0 || posX > 8 || checkPosX == false)//if the choice is outside of the table, teel the player that he is out of bounds
                     {
                         printf("Not available line for movement!\n");
                     }
@@ -656,14 +669,25 @@ void movePiece(bool whiteTurn)
                     printf("Select column:");
                     scanf(" %c",&posY);
                     posY = toupper(posY);
-                    for (int i = 0; i < sizeof availablePositions /sizeof availablePositions[0]; i+=2)
+                    
+                    for (int i = 1; i < sizeof availablePositions /sizeof availablePositions[0]; i+=2)
                     {
                         if(posY == availablePositions[i])
                         {
+                            checkPosY = true;
+                            break;
+                        }                    
+                    }
+
+                    for (int i = 1; i < sizeof availablePositionsAttack /sizeof availablePositionsAttack[0]; i+=2)
+                    {
+                        if(posY == availablePositionsAttack[i])
+                        {
+                            checkPosY = true;
                             break;
                         }                    
                     } 
-                    if(posY < 'A' || posY > 'H')//if the choice is outside of the table, teel the player that he is out of bounds
+                    if(posY < 'A' || posY > 'H' || checkPosY == false)//if the choice is outside of the table, teel the player that he is out of bounds
                     {
                         printf("Not available column for movement!\n");
                     }
@@ -675,6 +699,7 @@ void movePiece(bool whiteTurn)
                     {
                         pieces2[enemyIndex1].posX = 0;
                         pieces2[enemyIndex1].posY = 0;
+
                     }
 
                     if((posX == pieces2[enemyIndex2].posX && posY == pieces2[enemyIndex2].posY))
@@ -682,10 +707,11 @@ void movePiece(bool whiteTurn)
                         pieces2[enemyIndex2].posX = 0;
                         pieces2[enemyIndex2].posY = 0;
                     }
-
+                    
                     pieces1[index].posX = posX;
                     pieces1[index].posY = posY;
-                }else
+                }
+                else
                 {
                     if((posX == pieces1[enemyIndex1].posX && posY == pieces1[enemyIndex1].posY))
                     {
@@ -701,16 +727,8 @@ void movePiece(bool whiteTurn)
 
                     pieces2[index].posX = posX;
                     pieces2[index].posY = posY;
-                }
-                reCreateTable();
+                }                                
             }
-            else
-            {
-                reCreateTable();
-            }
-            
-            
-            
         }
         else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')
         {
@@ -1137,6 +1155,9 @@ void movePiece(bool whiteTurn)
         {
             //-> moves at any direction only once
         }
+        
+        reCreateTable();
+        whiteTurn = !whiteTurn;
     
 }    
 

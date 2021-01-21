@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
+#include "chess.h"
 //#include "Players.c"
 
 
@@ -12,7 +13,6 @@ void fileManipulation() {
 
 	//Cria/Abre o ficheiro
 	game_state = fopen("Game State.txt", "w");
-
 	/*
 	//Guarda o nickname de ambos os players
 	char nickname1[12];
@@ -27,9 +27,15 @@ void fileManipulation() {
 	{
 	    fprintf(game_state, "Player 1 nickname: %c", nickname1[12]);	
 	}
-	*/
-	
+	*/	
 	fclose(game_state);
-
-
 } 
+
+void saveGame()
+{
+	FILE *gameData;
+	gameData = fopen("GameData.txt","w");
+	writeCoordinatesOfPieces(gameData);
+	writePlayerTurn(gameData);
+	fclose(gameData);
+}
