@@ -11,9 +11,9 @@ int main(void)
     // setWhite();    
     createTable();
     while(playing)
-    {
-        movePiece();
+    {        
         saveGame();
+        movePiece();
         //checkKing(turn)
     }    
     return 0;

@@ -638,7 +638,7 @@ void movePiece()
                 bool checkPosY= false;
                 do
                 {
-                    printf("Select Line:");
+                    printf("Select line:");
                     scanf("%d",&posX);
                     for (int i = 0; i < sizeof availablePositions /sizeof availablePositions[0]; i+=2)
                     {
@@ -658,11 +658,11 @@ void movePiece()
                         }                    
                     }
 
-                    if(posX <= 0 || posX > 8 || checkPosX == false)//if the choice is outside of the table, teel the player that he is out of bounds
+                    if(checkPosX == false)//if the choice is outside of the table, teel the player that he is out of bounds
                     {
                         printf("Not available line for movement!\n");
                     }
-                }while(posX <= 0 || posX > 8);
+                }while(checkPosX == false);
 
                 do
                 {
@@ -687,11 +687,11 @@ void movePiece()
                             break;
                         }                    
                     } 
-                    if(posY < 'A' || posY > 'H' || checkPosY == false)//if the choice is outside of the table, teel the player that he is out of bounds
+                    if(checkPosY == false)//if the choice is outside of the table, teel the player that he is out of bounds
                     {
                         printf("Not available column for movement!\n");
                     }
-                }while(posY < 'A' || posY > 'H');
+                }while(checkPosY == false);
 
                 if(whiteTurn == true)
                 {
@@ -730,16 +730,22 @@ void movePiece()
                 }                                
             }
         }
-        else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')
+        else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')//vai se fuder torre de merda
         {
             int diferenceTop = selectedPiece.posX - 1;
             int diferenceRight = 'H' - selectedPiece.posY;
             int diferenceBottom = 8 - selectedPiece.posX;
             int diferenceLeft = selectedPiece.posY - 'A';
-            int availablePositions[14][2] = {0};
-            int index = 0;
+            //int availablePositions[14][2] = {0};
+            
+            int availablePositionsTop[7][2] = {0};
+            int availablePositionsBottom[7][2] = {0};
+            int availablePositionsRight[7][2] = {0};
+            int availablePositionsLeft[7][2] = {0};
+            int counter = 0;
             bool foundPiece = false;
 
+            // printf("%d",diferenceTop);    
             for(int i = 0; i<diferenceTop;i++)//positions on top of tower
             {
                 for(int p = 0;p < 16;p++)
@@ -749,40 +755,40 @@ void movePiece()
                         if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY)
                         {
                             foundPiece = true;
-                            availablePositions[i][0] = 0;
-                            availablePositions[i][1] = 0;
-                            printf("Found a piece 1 top\n\n");
-                            index++;
+                            availablePositionsTop[i][0] = 0;
+                            availablePositionsTop[i][1] = 0;
+                            // counter++;
+                            break;
                         }
                         else if(foundPiece == false)
                         {
-                            availablePositions[i][0] = selectedPiece.posX-(i+1);
-                            availablePositions[i][1] = selectedPiece.posY;
-                            printf("cant come up here 1\n\n");
-                            index++;
+                            availablePositionsTop[i][0] = selectedPiece.posX-(i+1);
+                            availablePositionsTop[i][1] = selectedPiece.posY;
+                            //counter++;
                         }
                     }else if(whiteTurn == false)
                     {
                         if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY)
                         {
                             foundPiece = true;
-                            availablePositions[i][0] = 0;
-                            availablePositions[i][1] = 0;
-                            printf("Found a piece 2 top\n\n");
-                            index++;
+                            availablePositionsTop[i][0] = 0;
+                            availablePositionsTop[i][1] = 0;
+                            // counter++;
+                            break;
                         }
                         else if(foundPiece == false)
                         {
-                            availablePositions[i][0] = selectedPiece.posX-(i+1);
-                            availablePositions[i][1] = selectedPiece.posY;
-                            printf("cant come up here 2\n\n");
-                            index++;
+                            availablePositionsTop[i][0] = selectedPiece.posX-(i+1);
+                            availablePositionsTop[i][1] = selectedPiece.posY;
+                            //counter++;
                         }
                     }                    
                 }
             }
-            printf("%d\n\n",index);
-            for(int i = index; i<diferenceBottom+index;i++)//positions on bottom of tower
+
+            //printf("%d\n",counter);
+            
+            for(int i = 0; i<diferenceBottom;i++)//positions on bottom of tower
             {
                 for(int p = 0;p < 16;p++)
                 {
@@ -791,40 +797,38 @@ void movePiece()
                         if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY)
                         {
                             foundPiece = true;
-                            availablePositions[i][0] = 0;
-                            availablePositions[i][1] = 0;
-                            printf("Found a piece 1 bottom\n\n");
-                            index++;
+                            availablePositionsBottom[i][0] = 0;
+                            availablePositionsBottom[i][1] = 0;
+                            counter++;
+                            break;
                         }
                         else if(foundPiece == false)
                         {
-                            availablePositions[i][0] = selectedPiece.posX+(i+1);
-                            availablePositions[i][1] = selectedPiece.posY;
-                            printf("cant come down here 1\n\n");
-                            index++;
+                            availablePositionsBottom[i][0] = selectedPiece.posX+(i+1);
+                            availablePositionsBottom[i][1] = selectedPiece.posY;
+                            //counter++;
                         }
                     }else if(whiteTurn == false)
                     {
                         if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY)
                         {
                             foundPiece = true;
-                            availablePositions[i][0] = 0;
-                            availablePositions[i][1] = 0;
-                            printf("Found a piece 2 bottom\n\n");
-                            index++;
+                            availablePositionsBottom[i][0] = 0;
+                            availablePositionsBottom[i][1] = 0;
+                            counter++;
+                            break;
                         }
                         else if(foundPiece == false)
                         {
-                            availablePositions[i][0] = selectedPiece.posX+(i+1);
-                            availablePositions[i][1] = selectedPiece.posY;
-                            printf("cant come down here 2\n\n");
-                            index++;
+                            availablePositionsBottom[i][0] = selectedPiece.posX+(i+1);
+                            availablePositionsBottom[i][1] = selectedPiece.posY;
+                            //counter++;
                         }
                     }        
                 }
             }
-            
-            for(int i = index; i<diferenceRight+index;i++)//positions on bottom of tower
+            // printf("%d\n",counter);
+            for(int i = 0; i<diferenceRight;i++)//positions on bottom of tower
             {
                 for(int p = 0;p < 16;p++)
                 {
@@ -833,315 +837,292 @@ void movePiece()
                         if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY+(i+1))
                         {
                             foundPiece = true;
-                            availablePositions[i][0] = 0;
-                            availablePositions[i][1] = 0;
-                            printf("Found a piece 1 bottom\n\n");
-                            index++;
+                            availablePositionsRight[i][0] = 0;
+                            availablePositionsRight[i][1] = 0;
+                            // counter++;
+                            break;
                         }
                         else if(foundPiece == false)
                         {
-                            availablePositions[i][0] = selectedPiece.posX+(i+1);
-                            availablePositions[i][1] = selectedPiece.posY;
-                            printf("cant come down here 1\n\n");
-                            index++;
+                            availablePositionsRight[i][0] = selectedPiece.posX;
+                            availablePositionsRight[i][1] = selectedPiece.posY+(i+1);
+                            // counter++;
                         }
                     }else if(whiteTurn == false)
                     {
                         if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY)
                         {
                             foundPiece = true;
-                            availablePositions[i][0] = 0;
-                            availablePositions[i][1] = 0;
-                            printf("Found a piece 2 bottom\n\n");
-                            index++;
+                            availablePositionsRight[i][0] = 0;
+                            availablePositionsRight[i][1] = 0;
+                            // counter++;
+                            break;
                         }
                         else if(foundPiece == false)
                         {
-                            availablePositions[i][0] = selectedPiece.posX+(i+1);
-                            availablePositions[i][1] = selectedPiece.posY;
-                            printf("cant come down here 2\n\n");
-                            index++;
+                            availablePositionsRight[i][0] = selectedPiece.posX;
+                            availablePositionsRight[i][1] = selectedPiece.posY+(i+1);
+                            // counter++;
                         }
                     }        
                 }
             }
-            for(int i = 0;i<14;i++)
+
+            for(int i = 0; i<diferenceLeft;i++)//positions on bottom of tower
             {
-                printf("%d %c\n",availablePositions[i][0],availablePositions[i][1]);
+                for(int p = 0;p < 16;p++)
+                {
+                    if(whiteTurn == true)
+                    {
+                        if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY-(i+1))
+                        {
+                            foundPiece = true;
+                            availablePositionsLeft[i][0] = 0;
+                            availablePositionsLeft[i][1] = 0;
+                            // counter++;
+                            break;
+                        }
+                        else if(foundPiece == false)
+                        {
+                            availablePositionsLeft[i][0] = selectedPiece.posX;
+                            availablePositionsLeft[i][1] = selectedPiece.posY-(i+1);
+                            // counter++;
+                        }
+                    }else if(whiteTurn == false)
+                    {
+                        if(pieces2[p].posX == selectedPiece.posX && pieces2[p].posY == selectedPiece.posY-(i+1))
+                        {
+                            foundPiece = true;
+                            availablePositionsLeft[i][0] = 0;
+                            availablePositionsLeft[i][1] = 0;
+                            // counter++;
+                            break;
+                        }
+                        else if(foundPiece == false)
+                        {
+                            availablePositionsLeft[i][0] = selectedPiece.posX;
+                            availablePositionsLeft[i][1] = selectedPiece.posY-(i+1);
+                            // counter++;
+                        }
+                    }        
+                }
+            }
+            for(int i = 0;i<7;i++)
+            {
+                printf("-> %d %c\n",availablePositionsTop[i][0],availablePositionsTop[i][1]);
             }
 
+            for(int i = 0;i<7;i++)
+            {
+                printf("-> %d %c\n",availablePositionsBottom[i][0],availablePositionsBottom[i][1]);
+            }
 
+            for(int i = 0;i<7;i++)
+            {
+                printf("-> %d %c\n",availablePositionsLeft[i][0],availablePositionsTop[i][1]);
+            }
 
-            //-> move forward or sideways as much as needed
-            // int availableLines[14] = {0};//vertical
-            // int availableColums[14] = {0};//herizontal
-            // if(selectedPiece.posX == 1)
-            // {
-            //     for (int i = 0; i < 7; i++)
-            //     {
-            //         availableLines[i] = i+2;
-            //     }     
-            //     for (int i = 7; i < sizeof availableLines/sizeof availableLines[0]; i++)
-            //     {                
-            //         availableLines[i] = selectedPiece.posX;
-            //     }           
-            // }
-            // else if(selectedPiece.posX == 8)
-            // {
-            //     for (int i = 6; i >= 0; i--)
-            //     {
-            //         availableLines[i] = i+1;
-            //     }
-            //     for (int i = 7; i < sizeof availableLines/sizeof availableLines[0]; i++)
-            //     {                
-            //         availableLines[i] = selectedPiece.posX;
-            //     }
-            // }
-            // else if(selectedPiece.posX > 1 && selectedPiece.posX < 8)
-            // {
-            //     int down = selectedPiece.posX - 1;
-            //     //int up = 8 - selectedPiece.posX;
-            //     int p = 0;
-            //     for (int i = down; i > 0; i--,p++)
-            //     {
-            //         availableLines[p] = i;
-            //     }
-            //     for (int i = selectedPiece.posX+1; i <= 8; i++,p++)
-            //     {
-            //         availableLines[p] = i;
-            //     }
-            //     for (int i = 7; i < sizeof availableLines/sizeof availableLines[0]; i++)
-            //     {                
-            //         availableLines[i] = selectedPiece.posX;
-            //     }
-            // }            
+            for(int i = 0;i<7;i++)
+            {
+                printf("-> %d %c\n",availablePositionsRight[i][0],availablePositionsBottom[i][1]);
+            }
+
+            bool checkPosX = false;
+            bool checkPosY = false;
+            do
+            {
+                printf("Select Line: ");
+                scanf("%d",&posX);
+                for(int l = 0; l < 14;l++)
+                {
+                    if((posX == availablePositionsTop[l][0] || posX == availablePositionsBottom[l][0] || posX == availablePositionsLeft[l][0] || posX == availablePositionsRight[l][0]) && posX != 0)
+                    {
+                        checkPosX = true;
+                        break;
+                    }
+                }
+                
+            } while (checkPosX == false);
             
-            // if(selectedPiece.posY == 'A')
-            // {
-            //     for (int i = 0; i < 7; i++)
-            //     {
-            //         availableColums[i] = selectedPiece.posY;
-            //     }
-            //     for (int i = 7; i < sizeof availableColums/sizeof availableColums[0]; i++)
-            //     {
-            //         availableColums[i] = selectedPiece.posY+(i-6);
-            //     }
+            do
+            {
+                printf("Select Column: ");
+                scanf(" %c",&posY);
+                posY = toupper(posY);
+                for(int l = 0; l < 14;l++)
+                {
+                    if((posY == availablePositionsTop[l][1] || posY == availablePositionsBottom[l][1] || posY == availablePositionsLeft[l][1] || posY == availablePositionsRight[l][1]) && posY != 0)
+                    {
+                        checkPosY = true;
+                        break;
+                    }                    
+                }
                 
-            // }
-            // else if(selectedPiece.posY == 'H')
-            // {
-            //     for (int i = 0; i < 7; i++)
-            //     {
-            //         availableColums[i] = selectedPiece.posY;
-            //     }
-            //     for (int i = 7; i < sizeof availableColums/sizeof availableColums[0]; i++)
-            //     {
-            //         availableColums[i] = selectedPiece.posY-(i-6);
-            //     }
-                
-            // }
-            // else if(selectedPiece.posY > 'A' && selectedPiece.posY < 'H')
-            // {
-            //     int down = selectedPiece.posY - 'A';
-            //     int p = 0;
-            //     for (int i = down; i >= 0; i--,p++)
-            //     {
-            //         availableColums[p] = i;
-            //     }
-            //     for (int i = selectedPiece.posY+1; i <= 'H'; i++,p++)
-            //     {
-            //         availableColums[p] = i;
-            //     }
-            //     for (int i = 7; i < sizeof availableColums/sizeof availableColums[0]; i++)
-            //     {
-            //         availableColums[i] = selectedPiece.posY+(i-6);
-            //     }                
-            // }
-            
-            // int posVL[7] = {0};
-            // int posVC[7] = {0};
-            // int posHL[7]= {0};
-            // int posHC[7]= {0};
+            } while (checkPosY == false);
 
-            // if(selectedPiece.costume == 'R')
-            // {
-            //     //verificar coluna da torre pos 0 -> 6
-            //     //verificar linha da torre  pos 7 -> 13
-               
-            //     // int diferenceDown = 8 - selectedPiece.posX;
-            //     // int diferenceUp = selectedPiece.posX-1;
-            //     // int counterDown = 0;
-            //     // for (int i = 0; i < diferenceDown; i++)
-            //     // {
-            //     //     for (int p = 0; p < sizeof pieces1/sizeof pieces1[0]; p++)
-            //     //     {
-            //     //         if(pieces1[p].posX == selectedPiece.posX+(p+1))
-            //     //         {
-            //     //             posVL[counterDown] = pieces1[p].posX;
-            //     //             posVC[counterDown] = pieces1[p].posY;
-            //     //             counterDown++;
-            //     //         }
-            //     //     }                    
-            //     // }
-            //     // for (int i = 0; i < diferenceUp; i++)
-            //     // {
-            //     //     for (int p = 0; p < sizeof pieces1/sizeof pieces1[0]; p++)
-            //     //     {
-            //     //         if(pieces1[p].posX == selectedPiece.posX-(p+1))
-            //     //         {
-            //     //             posVL[counterDown] = pieces1[p].posX;
-            //     //             posVC[counterDown] = pieces1[p].posY;
-            //     //             counterDown++;
-            //     //         }
-            //     //     }
-            //     // }
-                
-                
-            //     bool foundPiece = false;
-                
-            //     for (int i = 0; i < (sizeof availableColums/sizeof availableColums[0])/2; i++)//verificar a coluna da torre
-            //     {
-            //         for (int p = 0; p < sizeof pieces1/sizeof pieces1[0]; p++)
-            //         {
-            //             if(foundPiece == true)
-            //             {
-            //                 availableLines[i] = 0;
-            //                 availableColums[i] = 0;
-            //             }
-            //             else if(pieces1[p].posX == availableLines[i] && pieces1[p].posY == availableColums[i] && foundPiece == false)
-            //             {
-            //                 availableLines[i] = 0;
-            //                 availableColums[i] = 0;
-            //                 foundPiece = true;
-            //                 break;
-            //             }
-                        
-            //         }
-            //     }
-            //     foundPiece = false;
-            //     for (int i = 7; i < sizeof availableColums/sizeof availableColums[0]; i++)//verificar linha da torre
-            //     {
-            //         for (int p = 0; p < sizeof pieces1/sizeof pieces1[0]; p++)
-            //         {
-            //             if(pieces1[p].posX == availableLines[i] && pieces1[p].posY == availableColums[i] && foundPiece == false)
-            //             {
-            //                 availableLines[i] = 0;
-            //                 availableColums[i] = 0;
-            //                 foundPiece = true;
-            //                 break;
-            //             }else if(foundPiece == true)
-            //             {
-            //                 availableLines[i] = 0;
-            //                 availableColums[i] = 0;
-            //             }
-                        
-            //         }
-            //     }                
+            if(whiteTurn == true)
+            {
+                pieces1[index].posX = posX;
+                pieces1[index].posY = posY;
 
-            // }
-            // else if(selectedPiece.costume == 'r')
-            // {
-            //     bool foundPiece = false;
-                
-            //     for (int i = 0; i < (sizeof availableColums/sizeof availableColums[0])/2; i++)//verificar a coluna da torre
-            //     {
-            //         for (int p = 0; p < sizeof pieces2/sizeof pieces2[0]; p++)
-            //         {
-            //             if(pieces2[p].posX == availableLines[i] && pieces2[p].posY == availableColums[i] && foundPiece == false)
-            //             {
-            //                 availableLines[i] = 0;
-            //                 availableColums[i] = 0;
-            //                 foundPiece = true;
-            //                 break;
-            //             }else if(foundPiece == true)
-            //             {
-            //                 availableLines[i] = 0;
-            //                 availableColums[i] = 0;
-            //             }
-                        
-            //         }
-            //     }
-            //     foundPiece = false;
-            //     for (int i = 7; i < sizeof availableColums/sizeof availableColums[0]; i++)//verificar linha da torre
-            //     {
-            //         for (int p = 0; p < sizeof pieces2/sizeof pieces2[0]; p++)
-            //         {
-            //             if(pieces2[p].posX == availableLines[i] && pieces2[p].posY == availableColums[i] && foundPiece == false)
-            //             {
-            //                 availableLines[i] = 0;
-            //                 availableColums[i] = 0;
-            //                 foundPiece = true;
-            //                 break;
-            //             }else if(foundPiece == true)
-            //             {
-            //                 availableLines[i] = 0;
-            //                 availableColums[i] = 0;
-            //             }
-                        
-            //         }
-            //     } 
-            // }
-            
-
-            // printf("Available spaces for movement:\n");
-            // for (int l = 0,c = 0; l < sizeof availableLines/sizeof availableLines[0]; l++,c++)
-            // {
-            //     if(availableLines[l] != 0 && availableColums[l] != 0) 
-            //     {
-            //         printf("-> %d %c\n",availableLines[l],availableColums[c]);
-            //     }
-            // }
-            // //input player movement
-            // do
-            // {
-            //     printf("Select Line:");
-            //     scanf("%d",&posX);
-            //     for (int i = 0; i < sizeof availableLines /sizeof availableLines[0]; i++)
-            //     {
-            //         if(posX == availableLines[i])
-            //         {
-            //             break;
-            //         }                    
-            //     }                
-            //     if(posX <= 0 || posX > 8)//if the choice is outside of the table, teel the player that he is out of bounds
-            //     {
-            //         printf("Not available line for movement!\n");
-            //     }
-            // }while(posX <= 0 || posX > 8);
-
-            // do
-            // {
-            //     printf("Select column:");
-            //     scanf(" %c",&posY);
-            //     posY = toupper(posY);
-            //     for (int i = 0; i < sizeof availableLines /sizeof availableLines[0]; i+=2)
-            //     {
-            //         if(posY == availableColums[i])
-            //         {
-            //             break;
-            //         }                    
-            //     } 
-            //     if(posY < 'A' || posY > 'H')//if the choice is outside of the table, teel the player that he is out of bounds
-            //     {
-            //         printf("Not available column for movement!\n");
-            //     }
-            // }while(posY < 'A' || posY > 'H');
-            // if(whiteTurn == true)
-            // {
-            //     pieces1[index].posX = posX;
-            //     pieces1[index].posY = posY;
-            // }else
-            // {
-            //     pieces2[index].posX = posX;
-            //     pieces2[index].posY = posY;
-            // }
-            // printf("Selected Piece index %d new pos =>%d %c\n",index,selectedPiece.posX,selectedPiece.posY);
-
-            // reCreateTable();
+            }else
+            {
+                pieces2[index].posX = posX;
+                pieces2[index].posY = posY;
+            }
         }
         else if(selectedPiece.costume == 'n' || selectedPiece.costume == 'N')
         {
-            //-> move in L chape   
+            //-> move in L chape 
+            int availablePositions[8][2] = {0};
+            bool checkPosX = false;
+            bool checkPosY = false;
+            availablePositions[0][0] = selectedPiece.posX+2;
+            availablePositions[1][0] = selectedPiece.posX+2;
+            availablePositions[0][1] = selectedPiece.posY-1;
+            availablePositions[1][1] = selectedPiece.posY+1;
+
+            availablePositions[2][0] = selectedPiece.posX+1;
+            availablePositions[3][0] = selectedPiece.posX-1;
+            availablePositions[2][1] = selectedPiece.posY+2;
+            availablePositions[3][1] = selectedPiece.posY+2;
+
+            availablePositions[4][0] = selectedPiece.posX-2;
+            availablePositions[5][0] = selectedPiece.posX-2;
+            availablePositions[4][1] = selectedPiece.posY-1;
+            availablePositions[5][1] = selectedPiece.posY+1;
+
+            availablePositions[6][0] = selectedPiece.posX-1;
+            availablePositions[7][0] = selectedPiece.posX+1;
+            availablePositions[6][1] = selectedPiece.posY-2;
+            availablePositions[7][1] = selectedPiece.posY-2;
+          
+
+
+            for(int i = 0; i < 8 ; i++)
+            {
+                if(availablePositions[i][0] < 1 || availablePositions[i][0] > 8)
+                {
+                    availablePositions[i][0] = 0;
+                    availablePositions[i][1] = 0;
+                }
+
+                if(availablePositions[i][1] < 'A' || availablePositions[i][1] > 'H')
+                {
+                    availablePositions[i][0] = 0;
+                    availablePositions[i][1] = 0;
+                }
+            }
+
+            if(whiteTurn == true)
+            {
+                for(int p = 0; p < 16 ; p++)
+                {
+                    for(int pos = 0; pos < 8 ; pos++)
+                    {
+                        if(pieces1[p].posX == availablePositions[pos][0] && pieces1[p].posY == availablePositions[pos][1])
+                        {
+                            availablePositions[pos][0] = 0;
+                            availablePositions[pos][1] = 0;
+                        }
+                    }
+                }
+            }
+            else if(whiteTurn == false)
+            {
+                for(int p = 0; p < 16 ; p++)
+                {
+                    for(int pos = 0; pos < 8 ; pos++)
+                    {
+                        if(pieces2[p].posX == availablePositions[pos][0] && pieces2[p].posY == availablePositions[pos][1])
+                        {
+                            availablePositions[pos][0] = 0;
+                            availablePositions[pos][1] = 0;
+                        }
+                    }
+                }
+            }
+
+            for(int i = 0;i<8;i++)
+            {
+                if(availablePositions[i][0] != 0 && availablePositions[i][1] != 0)
+                {
+                    printf("-> %d %c\n",availablePositions[i][0],availablePositions[i][1]);
+                }
+            }
+
+            do
+            {
+                printf("Select line: ");
+                scanf("%d",&posX);
+                for(int pos = 0; pos < 8 ; pos++)
+                {
+                    if(availablePositions[pos][0] == posX)
+                    {
+                        checkPosX = true;
+                        break;
+                    }else
+                    {
+                        checkPosX = false;
+                    }                    
+                }
+                if(checkPosX == false)
+                {
+                    printf("Not available line for movement!\n");
+                }
+
+            } while (checkPosX == false);
+            
+            do
+            {
+                printf("Select column: ");
+                scanf(" %c",&posY);
+                posY = toupper(posY);
+                for(int pos = 0; pos < 8 ; pos++)
+                {
+                    if(availablePositions[pos][1] == posY)
+                    {
+                        checkPosY = true;
+                        break;
+                    }else
+                    {
+                        checkPosY = false;
+                    }                    
+                }
+                if(checkPosY == false)
+                {
+                    printf("Not available column for movement!\n");
+                }
+            } while (checkPosY == false);
+
+            if(whiteTurn == true)
+            {
+                for(int i = 0; i<16;i++)
+                {
+                    if(posX == pieces2[i].posX && posY == pieces2[i].posY)
+                    {
+                        pieces2[i].posX = 0;
+                        pieces2[i].posY = 0;
+                    }
+                }
+                pieces1[index].posX = posX;
+                pieces1[index].posY = posY;
+
+            }
+            else if(whiteTurn == false)
+            {
+                for(int i = 0; i<16;i++)
+                {
+                    if(posX == pieces1[i].posX && posY == pieces1[i].posY)
+                    {
+                        pieces1[i].posX = 0;
+                        pieces1[i].posY = 0;
+                        break;
+                    }
+                }
+                pieces2[index].posX = posX;
+                pieces2[index].posY = posY;                
+            }
         }
         else if(selectedPiece.costume == 'b' || selectedPiece.costume == 'B')
         {
@@ -1154,11 +1135,157 @@ void movePiece()
         else if(selectedPiece.costume == 'k' || selectedPiece.costume == 'K')
         {
             //-> moves at any direction only once
+            int availablePositions[8][2] = {0};
+            bool checkPosX = false;
+            bool checkPosY = false;
+            availablePositions[0][0] = selectedPiece.posX+1;
+            availablePositions[0][1] = selectedPiece.posY;
+            availablePositions[1][0] = selectedPiece.posX+1;
+            availablePositions[1][1] = selectedPiece.posY+1;
+            availablePositions[2][0] = selectedPiece.posX+1;
+            availablePositions[2][1] = selectedPiece.posY-1;
+
+            availablePositions[3][0] = selectedPiece.posX-1;
+            availablePositions[3][1] = selectedPiece.posY;
+            availablePositions[4][0] = selectedPiece.posX-1;
+            availablePositions[4][1] = selectedPiece.posY+1;
+            availablePositions[5][0] = selectedPiece.posX-1;
+            availablePositions[5][1] = selectedPiece.posY-1;
+
+            availablePositions[6][0] = selectedPiece.posX;
+            availablePositions[6][1] = selectedPiece.posY-1;
+
+            availablePositions[7][0] = selectedPiece.posX;
+            availablePositions[7][1] = selectedPiece.posY+1;
+
+            for(int i = 0; i < 8 ; i++)
+            {
+                if(availablePositions[i][0] < 1 || availablePositions[i][0] > 8)
+                {
+                    availablePositions[i][0] = 0;
+                    availablePositions[i][1] = 0;
+                }
+
+                if(availablePositions[i][1] < 'A' || availablePositions[i][1] > 'H')
+                {
+                    availablePositions[i][0] = 0;
+                    availablePositions[i][1] = 0;
+                }
+            }
+
+            if(whiteTurn == true)
+            {
+                for(int p = 0; p < 16 ; p++)
+                {
+                    for(int pos = 0; pos < 8 ; pos++)
+                    {
+                        if(pieces1[p].posX == availablePositions[pos][0] && pieces1[p].posY == availablePositions[pos][1])
+                        {
+                            availablePositions[pos][0] = 0;
+                            availablePositions[pos][1] = 0;
+                        }
+                    }
+                }
+            }
+            else if(whiteTurn == false)
+            {
+                for(int p = 0; p < 16 ; p++)
+                {
+                    for(int pos = 0; pos < 8 ; pos++)
+                    {
+                        if(pieces2[p].posX == availablePositions[pos][0] && pieces2[p].posY == availablePositions[pos][1])
+                        {
+                            availablePositions[pos][0] = 0;
+                            availablePositions[pos][1] = 0;
+                        }
+                    }
+                }
+            }
+
+            for(int i = 0;i<8;i++)
+            {
+                if(availablePositions[i][0] != 0 && availablePositions[i][1] != 0)
+                {
+                    printf("-> %d %c\n",availablePositions[i][0],availablePositions[i][1]);
+                }
+            }
+
+            do
+            {
+                printf("Select line: ");
+                scanf("%d",&posX);
+                for(int pos = 0; pos < 8 ; pos++)
+                {
+                    if(availablePositions[pos][0] == posX)
+                    {
+                        checkPosX = true;
+                        break;
+                    }else
+                    {
+                        checkPosX = false;
+                    }                    
+                }
+                if(checkPosX == false)
+                {
+                    printf("Not available line for movement!\n");
+                }
+
+            } while (checkPosX == false);
+            
+            do
+            {
+                printf("Select column: ");
+                scanf(" %c",&posY);
+                posY = toupper(posY);
+                for(int pos = 0; pos < 8 ; pos++)
+                {
+                    if(availablePositions[pos][1] == posY)
+                    {
+                        checkPosY = true;
+                        break;
+                    }else
+                    {
+                        checkPosY = false;
+                    }                    
+                }
+                if(checkPosY == false)
+                {
+                    printf("Not available column for movement!\n");
+                }
+            } while (checkPosY == false);
+
+            if(whiteTurn == true)
+            {
+                for(int i = 0; i<16;i++)
+                {
+                    if(posX == pieces2[i].posX && posY == pieces2[i].posY)
+                    {
+                        pieces2[i].posX = 0;
+                        pieces2[i].posY = 0;
+                    }
+                }
+                pieces1[index].posX = posX;
+                pieces1[index].posY = posY;
+
+            }
+            else if(whiteTurn == false)
+            {
+                for(int i = 0; i<16;i++)
+                {
+                    if(posX == pieces1[i].posX && posY == pieces1[i].posY)
+                    {
+                        pieces1[i].posX = 0;
+                        pieces1[i].posY = 0;
+                        break;
+                    }
+                }
+                pieces2[index].posX = posX;
+                pieces2[index].posY = posY;                
+            }
         }
         
         reCreateTable();
-        whiteTurn = !whiteTurn;
-    
+        whiteTurn = !whiteTurn;    
 }    
 
 
