@@ -292,6 +292,11 @@ void reCreateTable()
     }    
 }
 
+void setUpPieces(char dataPieces1[],char dataPieces2[])
+{
+    
+}
+
 void movePiece()
 {
     int index = 0;
@@ -1326,7 +1331,6 @@ void movePiece()
         
         reCreateTable();
         whiteTurn = !whiteTurn;    
-}    
-
+}
 
     

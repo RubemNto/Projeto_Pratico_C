@@ -22,4 +22,5 @@ void movePiece();
 void createPlayers();
 void setWhite();
 void checkGame();
+void setUpPieces();
 
