@@ -381,7 +381,6 @@ void movePiece()
             printf("Selected Piece %c(%d,%c)\nDo you wish to switch(Y/N)?",selectedPieceCostume,posX,posY);
             scanf(" %c",&answer);
             answer = toupper(answer);
-            //printf("%c",answer);
             if(answer == 'Y')
             {
                 choose = false;
@@ -405,17 +404,13 @@ void movePiece()
         {
             if(selectedPiece.costume == pieces1[i].costume && selectedPiece.posX == pieces1[i].posX && selectedPiece.posY == pieces1[i].posY)
             {
-                index = i;
-                //pieces1[i] = selectedPiece;
-                //printf("Selected Piece %c %d %c\n",pieces1[i].costume,pieces1[i].posX,pieces1[i].posY);    
+                index = i;  
                 break;
             }
         }else if(whiteTurn == false)
         {
             if(selectedPiece.costume == pieces2[i].costume && selectedPiece.posX == pieces2[i].posX && selectedPiece.posY == pieces2[i].posY)
             {
-                //pieces2[i] = selectedPiece;
-                //printf("Selected Piece %c %d %c\n",pieces2[i].costume,pieces2[i].posX,pieces2[i].posY);
                 index = i;    
                 break;
             }
@@ -427,7 +422,7 @@ void movePiece()
     posX = 0;//select new line to move
     posY = 0;//select new column to move
     
-        if(selectedPiece.costume == 'p' || selectedPiece.costume == 'P')
+        if(selectedPiece.costume == 'p' || selectedPiece.costume == 'P')//movement of pawn
         {
             //-> move forawrd only once
             //write available spaces
@@ -730,7 +725,7 @@ void movePiece()
                 }                                
             }
         }
-        else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')//vai se fuder torre de merda
+        else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')//movement rook
         {
             int diferenceTop = selectedPiece.posX - 1;
             int diferenceRight = 'H' - selectedPiece.posY;
@@ -742,7 +737,8 @@ void movePiece()
             int availablePositionsBottom[7][2] = {0};
             int availablePositionsRight[7][2] = {0};
             int availablePositionsLeft[7][2] = {0};
-            int counter = 0;
+            //int counter = 0;
+
             bool foundPiece = false;
 
             // printf("%d",diferenceTop);    
@@ -787,7 +783,7 @@ void movePiece()
             }
 
             //printf("%d\n",counter);
-            
+            foundPiece = false;            
             for(int i = 0; i<diferenceBottom;i++)//positions on bottom of tower
             {
                 for(int p = 0;p < 16;p++)
@@ -799,7 +795,7 @@ void movePiece()
                             foundPiece = true;
                             availablePositionsBottom[i][0] = 0;
                             availablePositionsBottom[i][1] = 0;
-                            counter++;
+                            //counter++;
                             break;
                         }
                         else if(foundPiece == false)
@@ -815,7 +811,7 @@ void movePiece()
                             foundPiece = true;
                             availablePositionsBottom[i][0] = 0;
                             availablePositionsBottom[i][1] = 0;
-                            counter++;
+                            //counter++;
                             break;
                         }
                         else if(foundPiece == false)
@@ -828,6 +824,7 @@ void movePiece()
                 }
             }
             // printf("%d\n",counter);
+            //foundPiece = false;
             for(int i = 0; i<diferenceRight;i++)//positions on bottom of tower
             {
                 for(int p = 0;p < 16;p++)
@@ -850,8 +847,10 @@ void movePiece()
                         }
                     }else if(whiteTurn == false)
                     {
-                        if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY)
+                        printf("Passei aqui1!\n");
+                        if(pieces2[p].posX == selectedPiece.posX && pieces2[p].posY == selectedPiece.posY+(i+1))
                         {
+                            printf("Passei aqui2!\n");
                             foundPiece = true;
                             availablePositionsRight[i][0] = 0;
                             availablePositionsRight[i][1] = 0;
@@ -860,6 +859,7 @@ void movePiece()
                         }
                         else if(foundPiece == false)
                         {
+                            printf("Passei aqui3!\n");
                             availablePositionsRight[i][0] = selectedPiece.posX;
                             availablePositionsRight[i][1] = selectedPiece.posY+(i+1);
                             // counter++;
@@ -867,7 +867,7 @@ void movePiece()
                     }        
                 }
             }
-
+            foundPiece = false;
             for(int i = 0; i<diferenceLeft;i++)//positions on bottom of tower
             {
                 for(int p = 0;p < 16;p++)
@@ -907,71 +907,101 @@ void movePiece()
                     }        
                 }
             }
+
+            bool foundPosition = false;
+
             for(int i = 0;i<7;i++)
             {
-                printf("-> %d %c\n",availablePositionsTop[i][0],availablePositionsTop[i][1]);
+                if(availablePositionsTop[i][0] != 0 && availablePositionsTop[i][1] != 0)
+                {
+                    printf("-> %d %c\n",availablePositionsTop[i][0],availablePositionsTop[i][1]);
+                    foundPosition = true;
+                }
             }
 
             for(int i = 0;i<7;i++)
             {
-                printf("-> %d %c\n",availablePositionsBottom[i][0],availablePositionsBottom[i][1]);
+                if(availablePositionsBottom[i][0] != 0 && availablePositionsBottom[i][1] != 0)
+                {
+                    printf("-> %d %c\n",availablePositionsBottom[i][0],availablePositionsBottom[i][1]);
+                    foundPosition = true;
+                }
             }
 
             for(int i = 0;i<7;i++)
             {
-                printf("-> %d %c\n",availablePositionsLeft[i][0],availablePositionsTop[i][1]);
+                if(availablePositionsLeft[i][0] != 0 && availablePositionsLeft[i][1] != 0)
+                {
+                    printf("-> %d %c\n",availablePositionsLeft[i][0],availablePositionsLeft[i][1]);
+                    foundPosition = true;
+                }
             }
 
             for(int i = 0;i<7;i++)
             {
-                printf("-> %d %c\n",availablePositionsRight[i][0],availablePositionsBottom[i][1]);
+                if(availablePositionsRight[i][0] != 0 && availablePositionsRight[i][1] != 0)
+                {
+                    printf("-> %d %c\n",availablePositionsRight[i][0],availablePositionsRight[i][1]);
+                    foundPosition = true;
+                }
             }
 
             bool checkPosX = false;
             bool checkPosY = false;
-            do
+            if(foundPosition)
             {
-                printf("Select Line: ");
-                scanf("%d",&posX);
-                for(int l = 0; l < 14;l++)
+                do
                 {
-                    if((posX == availablePositionsTop[l][0] || posX == availablePositionsBottom[l][0] || posX == availablePositionsLeft[l][0] || posX == availablePositionsRight[l][0]) && posX != 0)
+                    printf("Select Line: ");
+                    scanf("%d",&posX);
+                    for(int l = 0; l < 14;l++)
                     {
-                        checkPosX = true;
-                        break;
+                        if((posX == availablePositionsTop[l][0] || posX == availablePositionsBottom[l][0] || posX == availablePositionsLeft[l][0] || posX == availablePositionsRight[l][0]) && posX != 0)
+                        {
+                            checkPosX = true;
+                            break;
+                        }
                     }
-                }
-                
-            } while (checkPosX == false);
-            
-            do
-            {
-                printf("Select Column: ");
-                scanf(" %c",&posY);
-                posY = toupper(posY);
-                for(int l = 0; l < 14;l++)
-                {
-                    if((posY == availablePositionsTop[l][1] || posY == availablePositionsBottom[l][1] || posY == availablePositionsLeft[l][1] || posY == availablePositionsRight[l][1]) && posY != 0)
+                    if(checkPosX == false)
                     {
-                        checkPosY = true;
-                        break;
-                    }                    
-                }
+                        printf("Not available line for movement\n");
+                    }
+                    
+                } while (checkPosX == false);
                 
-            } while (checkPosY == false);
+                do
+                {
+                    printf("Select Column: ");
+                    scanf(" %c",&posY);
+                    posY = toupper(posY);
+                    for(int l = 0; l < 14;l++)
+                    {
+                        if((posY == availablePositionsTop[l][1] || posY == availablePositionsBottom[l][1] || posY == availablePositionsLeft[l][1] || posY == availablePositionsRight[l][1]) && posY != 0)
+                        {
+                            checkPosY = true;
+                            break;
+                        }                    
+                    }
+                    if(checkPosY == false)
+                    {
+                        printf("Not available column for movement\n");
+                    }
+                    
+                } while (checkPosY == false);
 
-            if(whiteTurn == true)
-            {
-                pieces1[index].posX = posX;
-                pieces1[index].posY = posY;
+                if(whiteTurn == true)
+                {
+                    pieces1[index].posX = posX;
+                    pieces1[index].posY = posY;
 
-            }else
-            {
-                pieces2[index].posX = posX;
-                pieces2[index].posY = posY;
-            }
+                }else
+                {
+                    pieces2[index].posX = posX;
+                    pieces2[index].posY = posY;
+                }
+            }            
         }
-        else if(selectedPiece.costume == 'n' || selectedPiece.costume == 'N')
+        else if(selectedPiece.costume == 'n' || selectedPiece.costume == 'N')//movement of knight
         {
             //-> move in L chape 
             int availablePositions[8][2] = {0};
@@ -1043,96 +1073,102 @@ void movePiece()
                 }
             }
 
+            bool existPositions = false;
             for(int i = 0;i<8;i++)
             {
                 if(availablePositions[i][0] != 0 && availablePositions[i][1] != 0)
                 {
                     printf("-> %d %c\n",availablePositions[i][0],availablePositions[i][1]);
+                    existPositions = true;
                 }
             }
 
-            do
+            if(existPositions == true)
             {
-                printf("Select line: ");
-                scanf("%d",&posX);
-                for(int pos = 0; pos < 8 ; pos++)
+                do
                 {
-                    if(availablePositions[pos][0] == posX)
+                    printf("Select line: ");
+                    scanf("%d",&posX);
+                    for(int pos = 0; pos < 8 ; pos++)
                     {
-                        checkPosX = true;
-                        break;
-                    }else
-                    {
-                        checkPosX = false;
-                    }                    
-                }
-                if(checkPosX == false)
-                {
-                    printf("Not available line for movement!\n");
-                }
-
-            } while (checkPosX == false);
-            
-            do
-            {
-                printf("Select column: ");
-                scanf(" %c",&posY);
-                posY = toupper(posY);
-                for(int pos = 0; pos < 8 ; pos++)
-                {
-                    if(availablePositions[pos][1] == posY)
-                    {
-                        checkPosY = true;
-                        break;
-                    }else
-                    {
-                        checkPosY = false;
-                    }                    
-                }
-                if(checkPosY == false)
-                {
-                    printf("Not available column for movement!\n");
-                }
-            } while (checkPosY == false);
-
-            if(whiteTurn == true)
-            {
-                for(int i = 0; i<16;i++)
-                {
-                    if(posX == pieces2[i].posX && posY == pieces2[i].posY)
-                    {
-                        pieces2[i].posX = 0;
-                        pieces2[i].posY = 0;
+                        if(availablePositions[pos][0] == posX)
+                        {
+                            checkPosX = true;
+                            break;
+                        }else
+                        {
+                            checkPosX = false;
+                        }                    
                     }
-                }
-                pieces1[index].posX = posX;
-                pieces1[index].posY = posY;
-
-            }
-            else if(whiteTurn == false)
-            {
-                for(int i = 0; i<16;i++)
-                {
-                    if(posX == pieces1[i].posX && posY == pieces1[i].posY)
+                    if(checkPosX == false)
                     {
-                        pieces1[i].posX = 0;
-                        pieces1[i].posY = 0;
-                        break;
+                        printf("Not available line for movement!\n");
                     }
+
+                } while (checkPosX == false);
+                
+                do
+                {
+                    printf("Select column: ");
+                    scanf(" %c",&posY);
+                    posY = toupper(posY);
+                    for(int pos = 0; pos < 8 ; pos++)
+                    {
+                        if(availablePositions[pos][1] == posY)
+                        {
+                            checkPosY = true;
+                            break;
+                        }else
+                        {
+                            checkPosY = false;
+                        }                    
+                    }
+                    if(checkPosY == false)
+                    {
+                        printf("Not available column for movement!\n");
+                    }
+                } while (checkPosY == false);
+
+                if(whiteTurn == true)
+                {
+                    for(int i = 0; i<16;i++)
+                    {
+                        if(posX == pieces2[i].posX && posY == pieces2[i].posY)
+                        {
+                            pieces2[i].posX = 0;
+                            pieces2[i].posY = 0;
+                            break;
+                        }
+                    }
+                    pieces1[index].posX = posX;
+                    pieces1[index].posY = posY;
+
                 }
-                pieces2[index].posX = posX;
-                pieces2[index].posY = posY;                
-            }
+                else if(whiteTurn == false)
+                {
+                    for(int i = 0; i<16;i++)
+                    {
+                        if(posX == pieces1[i].posX && posY == pieces1[i].posY)
+                        {
+                            pieces1[i].posX = 0;
+                            pieces1[i].posY = 0;
+                            break;
+                        }
+                    }
+                    pieces2[index].posX = posX;
+                    pieces2[index].posY = posY;                
+                }
+            }            
         }
-        else if(selectedPiece.costume == 'b' || selectedPiece.costume == 'B')
+        else if(selectedPiece.costume == 'b' || selectedPiece.costume == 'B')//movement of bishop
         {
             //-> moves diagonaly
         }
-        else if(selectedPiece.costume == 'q' || selectedPiece.costume == 'Q')
+        else if(selectedPiece.costume == 'q' || selectedPiece.costume == 'Q')//movement of Queen
         {
             //-> moves at any direction as many spaces as needed
         }
-        else if(selectedPiece.costume == 'k' || selectedPiece.costume == 'K')
+        else if(selectedPiece.costume == 'k' || selectedPiece.costume == 'K')//movement of King
         {
             //-> moves at any direction only once
             int availablePositions[8][2] = {0};
@@ -1201,87 +1237,91 @@ void movePiece()
                     }
                 }
             }
-
+            bool existPositions = false;
             for(int i = 0;i<8;i++)
             {
                 if(availablePositions[i][0] != 0 && availablePositions[i][1] != 0)
                 {
                     printf("-> %d %c\n",availablePositions[i][0],availablePositions[i][1]);
+                    existPositions = true;
                 }
             }
 
-            do
+            if(existPositions == true)
             {
-                printf("Select line: ");
-                scanf("%d",&posX);
-                for(int pos = 0; pos < 8 ; pos++)
+                do
                 {
-                    if(availablePositions[pos][0] == posX)
+                    printf("Select line: ");
+                    scanf("%d",&posX);
+                    for(int pos = 0; pos < 8 ; pos++)
                     {
-                        checkPosX = true;
-                        break;
-                    }else
-                    {
-                        checkPosX = false;
-                    }                    
-                }
-                if(checkPosX == false)
-                {
-                    printf("Not available line for movement!\n");
-                }
-
-            } while (checkPosX == false);
-            
-            do
-            {
-                printf("Select column: ");
-                scanf(" %c",&posY);
-                posY = toupper(posY);
-                for(int pos = 0; pos < 8 ; pos++)
-                {
-                    if(availablePositions[pos][1] == posY)
-                    {
-                        checkPosY = true;
-                        break;
-                    }else
-                    {
-                        checkPosY = false;
-                    }                    
-                }
-                if(checkPosY == false)
-                {
-                    printf("Not available column for movement!\n");
-                }
-            } while (checkPosY == false);
-
-            if(whiteTurn == true)
-            {
-                for(int i = 0; i<16;i++)
-                {
-                    if(posX == pieces2[i].posX && posY == pieces2[i].posY)
-                    {
-                        pieces2[i].posX = 0;
-                        pieces2[i].posY = 0;
+                        if(availablePositions[pos][0] == posX)
+                        {
+                            checkPosX = true;
+                            break;
+                        }else
+                        {
+                            checkPosX = false;
+                        }                    
                     }
-                }
-                pieces1[index].posX = posX;
-                pieces1[index].posY = posY;
-
-            }
-            else if(whiteTurn == false)
-            {
-                for(int i = 0; i<16;i++)
-                {
-                    if(posX == pieces1[i].posX && posY == pieces1[i].posY)
+                    if(checkPosX == false)
                     {
-                        pieces1[i].posX = 0;
-                        pieces1[i].posY = 0;
-                        break;
+                        printf("Not available line for movement!\n");
                     }
+
+                } while (checkPosX == false);
+                
+                do
+                {
+                    printf("Select column: ");
+                    scanf(" %c",&posY);
+                    posY = toupper(posY);
+                    for(int pos = 0; pos < 8 ; pos++)
+                    {
+                        if(availablePositions[pos][1] == posY)
+                        {
+                            checkPosY = true;
+                            break;
+                        }else
+                        {
+                            checkPosY = false;
+                        }                    
+                    }
+                    if(checkPosY == false)
+                    {
+                        printf("Not available column for movement!\n");
+                    }
+                } while (checkPosY == false);
+
+                if(whiteTurn == true)
+                {
+                    for(int i = 0; i<16;i++)
+                    {
+                        if(posX == pieces2[i].posX && posY == pieces2[i].posY)
+                        {
+                            pieces2[i].posX = 0;
+                            pieces2[i].posY = 0;
+                        }
+                    }
+                    pieces1[index].posX = posX;
+                    pieces1[index].posY = posY;
+
                 }
-                pieces2[index].posX = posX;
-                pieces2[index].posY = posY;                
-            }
+                else if(whiteTurn == false)
+                {
+                    for(int i = 0; i<16;i++)
+                    {
+                        if(posX == pieces1[i].posX && posY == pieces1[i].posY)
+                        {
+                            pieces1[i].posX = 0;
+                            pieces1[i].posY = 0;
+                            break;
+                        }
+                    }
+                    pieces2[index].posX = posX;
+                    pieces2[index].posY = posY;                
+                }
+            }          
         }
         
         reCreateTable();
