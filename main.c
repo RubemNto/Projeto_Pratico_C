@@ -8,12 +8,12 @@ int main(void)
 {
     bool playing = true;
     // createPlayers();
-    // setWhite();    
+    setWhite();    
     loadGame();
-    createTable();
+    //createTable();
     while(playing)
     {        
-        saveGame();
+       // saveGame();
         movePiece();
         //checkKing(turn)
     }    

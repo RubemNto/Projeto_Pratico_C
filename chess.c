@@ -252,10 +252,50 @@ void createTable()
     }
 }
 
+void loadTable(piece _pieces1[], piece _pieces2[] ){
+
+    for(int i = 0; i < 16; i++){
+
+        
+        pieces1[i].costume = _pieces1[i].costume;
+        pieces1[i].posX = _pieces1[i].posX;
+        pieces1[i].posY = _pieces1[i].posY;
+
+        pieces2[i].costume = _pieces2[i].costume;
+        pieces2[i].posX = _pieces2[i].posX;
+        pieces2[i].posY = _pieces2[i].posY;
+
+        
+/*
+        printf("%c ",pieces1[i].costume);
+        printf("%d ",pieces1[i].posX);
+        printf("%c\n",pieces1[i].posY); */
+
+        
+    }
+        
+    reCreateTable();
+}
+
 void reCreateTable()
 {
+    for(int i = 0; i < 16; i++){
+
+
+        printf("%c ",pieces1[i].costume);
+        printf("%d ",pieces1[i].posX);
+        printf("%c\n",pieces1[i].posY);
+        printf("\n");
+        printf("%c ",pieces2[i].costume);
+        printf("%d ",pieces2[i].posX);
+        printf("%c\n",pieces2[i].posY);
+        
+        
+    }
+
+
     bool foundPiece;
-    system("cls");
+    //system("cls");
     printf("   A");
     for (int i = 'B'; i <= 'H'; i++)
     {
@@ -291,6 +331,8 @@ void reCreateTable()
         printf("\n");
     }    
 }
+
+
 
 void setUpPieces(char dataPieces1[],char dataPieces2[])
 {

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "chess.h"
+
 //#include "Players.c"
 
 
@@ -13,6 +14,7 @@ void fileManipulation() {
 
 	//Cria/Abre o ficheiro
 	game_state = fopen("Game State.txt", "w");
+
 	/*
 	//Guarda o nickname de ambos os players
 	char nickname1[12];
@@ -45,7 +47,8 @@ void loadGame()
 	char fileLocation[200] = "";
 	char data[67][6];
 	piece tempPieces1[16];
-	piece tempPiece2[16];
+	piece tempPieces2[16];
+	char LIXO[20];
 	printf("Write location of data file: ");
 	gets(fileLocation);
 
@@ -56,24 +59,40 @@ void loadGame()
 		exit(1);             
 	}else
 	{
-		for (int i = 0; i < 67; i++)
-		{
-			fgets(data[i],6,fp);
-		}
-		//0 --> 31 --> pieces1 data
-		//33 --> 64 --> pieces2 data
-		//66 --> whiteTurn
 		int counter;
-		for (int i = 0; i < 32; i++)
+		for (int i = 0; i < 16; i++)
 		{
-			data[i][0];//costume
-			data[i][2];//line
-			data[i][4];//column
-		}
-		for (int i = 33; i < 65; i++)
-		{
+			fscanf(fp," %c",&(tempPieces1[i].costume)); 
+			fgetc(fp);
+			fscanf(fp,"%d",&(tempPieces1[i].posX)); 
+			fgetc(fp);
+			fscanf(fp," %c",&(tempPieces1[i].posY)); 
+			fgetc(fp);
+
 			
+			//printf("%c",tempPieces1[i].costume);
+			//printf("\n");
+			//printf("%d \n",tempPieces1[i].posX);
+		
+
 		}
+		fgetc(fp);
+		for (int i = 0; i < 16; i++)
+		{
+			fscanf(fp," %c",&(tempPieces2[i].costume)); 
+			fgetc(fp);
+			fscanf(fp,"%d",&(tempPieces2[i].posX)); 
+			fgetc(fp);
+			fscanf(fp,"%c",&(tempPieces2[i].posY)); 
+			fgetc(fp);
+
+			//printf("%c",tempPieces2[i].costume);
+			//printf("\n");
+			//printf("%d \n",tempPieces2[i].posX);
+		
+		}
+
+		loadTable(tempPieces1, tempPieces2);
 		
 						
 	}
