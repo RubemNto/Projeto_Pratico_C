@@ -24,3 +24,11 @@ void setWhite();
 void checkGame();
 void setUpPieces();
 
+void movePawn(piece selectedPiece,int index,int posX,char posY);
+void moveRook(piece selectedPiece,int index,int posX,char posY);
+void moveKnight(piece selectedPiece,int index,int posX,char posY);
+void moveBishop(piece selectedPiece,int index,int posX,char posY);
+void moveQueen(piece selectedPiece,int index,int posX,char posY);
+void moveKing(piece selectedPiece,int index,int posX,char posY);
+
+

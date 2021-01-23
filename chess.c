@@ -292,7 +292,7 @@ void reCreateTable()
     }    
 }
 
-void setUpPieces(char dataPieces1[],char dataPieces2[])
+void setUpPieces()
 {
     
 }
@@ -430,8 +430,39 @@ void movePiece()
         if(selectedPiece.costume == 'p' || selectedPiece.costume == 'P')//movement of pawn
         {
             //-> move forawrd only once
-            //write available spaces
-            int availablePositionsAttack[4] ={0};
+            movePawn(selectedPiece,index,posX,posY);            
+        }
+        else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')//movement rook
+        {
+            moveRook(selectedPiece,index,posX,posY);          
+        }
+        else if(selectedPiece.costume == 'n' || selectedPiece.costume == 'N')//movement of knight
+        {
+            //-> move in L chape 
+            moveKnight(selectedPiece,index,posX,posY);         
+        }
+        else if(selectedPiece.costume == 'b' || selectedPiece.costume == 'B')//movement of bishop
+        {
+            //-> moves diagonaly
+            moveBishop(selectedPiece,index,posX,posY);
+        }
+        else if(selectedPiece.costume == 'q' || selectedPiece.costume == 'Q')//movement of Queen
+        {
+            //-> moves at any direction as many spaces as needed
+        }
+        else if(selectedPiece.costume == 'k' || selectedPiece.costume == 'K')//movement of King
+        {
+            //-> moves at any direction only once
+            moveKing(selectedPiece,index,posX,posY);
+        }
+        
+        reCreateTable();
+        whiteTurn = !whiteTurn;    
+}
+
+void movePawn(piece selectedPiece,int index,int posX,char posY)//done
+{
+    int availablePositionsAttack[4] ={0};
             int availablePositions[2] = {0};
             int enemyIndex1 = 0,enemyIndex2 = 0;
             if(random == 0 && whiteTurn == true)
@@ -729,10 +760,11 @@ void movePiece()
                     pieces2[index].posY = posY;
                 }                                
             }
-        }
-        else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')//movement rook
-        {
-            int diferenceTop = selectedPiece.posX - 1;
+}
+
+void moveRook(piece selectedPiece,int index,int posX,char posY)
+{
+    int diferenceTop = selectedPiece.posX - 1;
             int diferenceRight = 'H' - selectedPiece.posY;
             int diferenceBottom = 8 - selectedPiece.posX;
             int diferenceLeft = selectedPiece.posY - 'A';
@@ -1005,11 +1037,11 @@ void movePiece()
                     pieces2[index].posY = posY;
                 }
             }            
-        }
-        else if(selectedPiece.costume == 'n' || selectedPiece.costume == 'N')//movement of knight
-        {
-            //-> move in L chape 
-            int availablePositions[8][2] = {0};
+}
+
+void moveKnight(piece selectedPiece,int index,int posX,char posY)//done
+{
+    int availablePositions[8][2] = {0};
             bool checkPosX = false;
             bool checkPosY = false;
             availablePositions[0][0] = selectedPiece.posX+2;
@@ -1163,20 +1195,268 @@ void movePiece()
                     pieces2[index].posX = posX;
                     pieces2[index].posY = posY;                
                 }
-            }            
-        }
-        else if(selectedPiece.costume == 'b' || selectedPiece.costume == 'B')//movement of bishop
+            }                
+}
+
+void moveBishop(piece selectedPiece,int index,int posX,char posY)//done
+{
+    int availablePositionsDiagonal1Up[7][2] = {0};
+    int availablePositionsDiagonal1Down[7][2] = {0};
+    
+    int availablePositionsDiagonal2Up[7][2] = {0};
+    int availablePositionsDiagonal2Down[7][2] = {0};
+    bool existsPositions = false;
+    bool foundPiece = false;
+
+    ////check diagonal 1
+
+    for (int i = 0; i < 7; i++)
+    {
+        if(selectedPiece.posX+(i+1) <= 8 && selectedPiece.posY-(i+1) >= 'A')
         {
-            //-> moves diagonaly
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }
+                }
+                else if(whiteTurn == false)
+                {
+                    if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                        
+                    }
+                }
+            }
+            if(foundPiece == false)
+            {
+                availablePositionsDiagonal1Down[i][0] = selectedPiece.posX+(i+1);
+                availablePositionsDiagonal1Down[i][1] = selectedPiece.posY-(i+1);
+                //printf("%d %c\n",selectedPiece.posX+(i+1),selectedPiece.posY-(i+1));
+            }
+            
         }
-        else if(selectedPiece.costume == 'q' || selectedPiece.costume == 'Q')//movement of Queen
+    }
+    foundPiece = false;
+    for (int i = 0; i < 7; i++)
+    {
+        if(selectedPiece.posX-(i+1) > 0 && selectedPiece.posY+(i+1) <= 'H')
         {
-            //-> moves at any direction as many spaces as needed
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }
+                }
+                else if(whiteTurn == false)
+                {
+                    if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                    }
+                }
+            }
+            if(foundPiece == false)
+            {
+                availablePositionsDiagonal1Up[i][0] = selectedPiece.posX-(i+1);
+                availablePositionsDiagonal1Up[i][1] = selectedPiece.posY+(i+1);
+                // printf("%d %c\n",selectedPiece.posX-(i+1),selectedPiece.posY+(i+1));
+            }
         }
-        else if(selectedPiece.costume == 'k' || selectedPiece.costume == 'K')//movement of King
+    }
+
+    //check diagonal 2
+
+    for (int i = 0; i < 7; i++)
+    {
+        if(selectedPiece.posX+(i+1) <= 8 && selectedPiece.posY+(i+1) <= 'H')
         {
-            //-> moves at any direction only once
-            int availablePositions[8][2] = {0};
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }
+                }
+                else if(whiteTurn == false)
+                {
+                    if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                        
+                    }
+                }
+            }
+            if(foundPiece == false)
+            {
+                availablePositionsDiagonal2Down[i][0] = selectedPiece.posX+(i+1);
+                availablePositionsDiagonal2Down[i][1] = selectedPiece.posY+(i+1);
+                // printf("%d %c\n",selectedPiece.posX+(i+1),selectedPiece.posY-(i+1));
+            }
+            
+        }
+    }
+    foundPiece = false;
+    for (int i = 0; i < 7; i++)
+    {
+        if(selectedPiece.posX-(i+1) > 0 && selectedPiece.posY-(i+1) >= 'A')
+        {
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }
+                }
+                else if(whiteTurn == false)
+                {
+                    if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                    }
+                }
+            }
+            if(foundPiece == false)
+            {
+                availablePositionsDiagonal2Up[i][0] = selectedPiece.posX-(i+1);
+                availablePositionsDiagonal2Up[i][1] = selectedPiece.posY-(i+1);
+                // printf("%d %c\n",selectedPiece.posX-(i+1),selectedPiece.posY+(i+1));
+            }
+        }
+    }
+
+    //Show available positions
+    for (int i = 0; i < 7; i++)
+    {        
+        if(availablePositionsDiagonal1Down[i][0] != 0 && availablePositionsDiagonal1Down[i][1] != 0)
+        {
+            printf("-> %d %c D1D\n",availablePositionsDiagonal1Down[i][0],availablePositionsDiagonal1Down[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(availablePositionsDiagonal1Up[i][0] != 0 && availablePositionsDiagonal1Up[i][1] != 0)
+        {
+            printf("-> %d %c D1U\n",availablePositionsDiagonal1Up[i][0],availablePositionsDiagonal1Up[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(availablePositionsDiagonal2Down[i][0] != 0 && availablePositionsDiagonal2Down[i][1] != 0)
+        {
+            printf("-> %d %c D2D\n",availablePositionsDiagonal2Down[i][0],availablePositionsDiagonal2Down[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(availablePositionsDiagonal2Up[i][0] != 0 && availablePositionsDiagonal2Up[i][1] != 0)
+        {
+            printf("-> %d %c D2U\n",availablePositionsDiagonal2Up[i][0],availablePositionsDiagonal2Up[i][1]);
+            existsPositions = true;
+        }
+    }     
+
+    if(existsPositions)
+    {
+        bool checkPosX = false;
+        bool checkPosY = false;
+        do
+        {
+            printf("Select line: ");
+            scanf("%d",&posX);
+            for (int i = 0; i < 7; i++)
+            {
+                if((availablePositionsDiagonal1Down[i][0] == posX || availablePositionsDiagonal1Up[i][0] == posX || availablePositionsDiagonal2Down[i][0] == posX || availablePositionsDiagonal2Up[i][0] == posX) && posX != 0)
+                {
+                    checkPosX = true;
+                }
+            }
+            
+        } while (checkPosX == false);
+
+        do
+        {
+            printf("Select Column: ");
+            scanf(" %c",&posY);
+            posY = toupper(posY);
+            for (int i = 0; i < 7; i++)
+            {
+                if((availablePositionsDiagonal1Down[i][1] == posY || availablePositionsDiagonal1Up[i][1] == posY || availablePositionsDiagonal2Down[i][1] == posY || availablePositionsDiagonal2Up[i][1] == posY) && posY != 0)
+                {
+                    checkPosY = true;
+                }
+            }
+        } while (checkPosY == false);
+
+        if(whiteTurn == true)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                if(pieces2[i].posX == posX && pieces2[i].posY == posY)
+                {
+                    pieces2[i].posX = 0;
+                    pieces2[i].posY = 0;
+                }
+            }
+
+            pieces1[index].posX = posX;
+            pieces1[index].posY = posY;
+        }
+        else if(whiteTurn == false)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                if(pieces1[i].posX == posX && pieces1[i].posY == posY)
+                {
+                    pieces1[i].posX = 0;
+                    pieces1[i].posY = 0;
+                }
+            }
+
+            pieces2[index].posX = posX;
+            pieces2[index].posY = posY;
+        }        
+    }        
+}
+
+void moveQueen(piece selectedPiece,int index,int posX,char posY)
+{
+    
+}
+
+void moveKing(piece selectedPiece,int index,int posX,char posY)//done
+{
+    int availablePositions[8][2] = {0};
             bool checkPosX = false;
             bool checkPosY = false;
             availablePositions[0][0] = selectedPiece.posX+1;
@@ -1327,10 +1607,4 @@ void movePiece()
                     pieces2[index].posY = posY;                
                 }
             }          
-        }
-        
-        reCreateTable();
-        whiteTurn = !whiteTurn;    
-}
-
-    
+}    

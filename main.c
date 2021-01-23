@@ -9,7 +9,7 @@ int main(void)
     bool playing = true;
     // createPlayers();
     // setWhite();    
-    loadGame();
+    //loadGame();
     createTable();
     while(playing)
     {        
