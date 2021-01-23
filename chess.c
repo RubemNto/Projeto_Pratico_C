@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -7,6 +8,7 @@
 #include <stdbool.h>
 #include <conio.h>
 #include <math.h>
+#include "fileio.h"
 
 piece pieces1[16];//brancos
 piece pieces2[16];//pretos
@@ -15,6 +17,41 @@ player players[2];
 bool whiteTurn = true;
 
 int random;
+
+void startMenu()
+{
+    int answer;
+    do
+    {
+        printf("Chess game EDJD 2021\n\n");
+        printf("1 - Start new game\n");
+        printf("2 - Load existing game\n");
+        printf("3 - quit\n");
+        printf("answer: ");
+        scanf(" %d",&answer);
+        if(answer > 3 || answer < 1)
+        {
+            printf("Not valid answer!");
+        }
+    }while (answer > 3 || answer < 1);
+
+    if(answer == 1)
+    {
+        _flushall();
+        createPlayers();
+        setWhite();
+        createTable();        
+    }else if (answer == 2)
+    {        
+        loadGame();
+    }else
+    {
+        printf("Thanks for playing!\n");
+        exit(1);
+    }
+    
+}
+
 void writeRandom()
 {
     printf("%d",random);
@@ -65,13 +102,14 @@ void createPlayers(){
 }
 
 //--------------------   FUNCTION TO INFORM THE PLAYERS OF WHO PLAYS FIRST/ IS WHITE  ------------------//
+
 void checkGame()//check if game is over by checking if the king still exists in game
 {    
     bool foundKingW;
     bool foundKingB;
     for (int i = 0; i < sizeof pieces1/sizeof pieces1[0]; i++)
     {
-        if(pieces1[i].costume == 'K')
+        if(pieces1[i].costume == 'K' && pieces1[i].posX != 0 && pieces1[i].posY != 0)
         {
             foundKingW = true;
             break;
@@ -79,7 +117,7 @@ void checkGame()//check if game is over by checking if the king still exists in 
     }
     for (int i = 0; i < sizeof pieces2/sizeof pieces2[0]; i++)
     {
-        if(pieces2[i].costume == 'k')
+        if(pieces2[i].costume == 'k' && pieces1[i].posX != 0 && pieces1[i].posY != 0)
         {
             foundKingB = true;
             break;
@@ -94,6 +132,7 @@ void checkGame()//check if game is over by checking if the king still exists in 
     else if(!foundKingW && foundKingB)
     {
         printf("%s won the match\nCongratulations!",players[1].nickname);
+        exit(1);
     }    
 }
 
@@ -371,6 +410,26 @@ void reCreateTable()//recreates the table given the positions of the pieces in t
     }    
 }*/
 
+void confirmContinueGame()//check if game must go on
+{
+    char answer = ' ';
+    printf("End the match?(Y/N)\n");
+    scanf(" %c",&answer);
+    answer = toupper(answer);
+    do
+    {    
+        if(answer == 'Y')
+        {
+            printf("Match has stopped\n");
+            exit(1);
+        }
+        else if(answer != 'Y' && answer != 'N')
+        {
+            printf("Not valid answer!\n");
+        }
+    } while (answer != 'Y' && answer != 'N');    
+}
+
 void movePiece()
 {
     int index = 0;//index of selected piece
@@ -524,6 +583,7 @@ void movePiece()
             moveKing(selectedPiece,index,posX,posY);
         }
         
+        checkGame();
         reCreateTable();
         whiteTurn = !whiteTurn;    
 }
@@ -531,12 +591,17 @@ void movePiece()
 void movePawn(piece selectedPiece,int index,int posX,char posY)//done
 {
     int availablePositionsAttack[4] ={0};
-            int availablePositions[2] = {0};
+            int availablePositions[4] = {0};
             int enemyIndex1 = 0,enemyIndex2 = 0;
             if(random == 0 && whiteTurn == true)
             {
                 availablePositions[0] = selectedPiece.posX + 1;
                 availablePositions[1] = selectedPiece.posY;
+                if(selectedPiece.posX == 2)
+                {
+                    availablePositions[2] = selectedPiece.posX + 2;
+                    availablePositions[3] = selectedPiece.posY;
+                }
                 if(selectedPiece.posY != 'A' && selectedPiece.posY !='H')
                 {
                     availablePositionsAttack[0] = selectedPiece.posX + 1;
@@ -563,6 +628,11 @@ void movePawn(piece selectedPiece,int index,int posX,char posY)//done
             {
                 availablePositions[0] = selectedPiece.posX - 1;
                 availablePositions[1] = selectedPiece.posY;
+                if(selectedPiece.posX == 7)
+                {
+                    availablePositions[2] = selectedPiece.posX - 2;
+                    availablePositions[3] = selectedPiece.posY;
+                }
                 if(selectedPiece.posY != 'A' && selectedPiece.posY !='H')
                 {
                     availablePositionsAttack[0] = selectedPiece.posX - 1;
@@ -589,6 +659,11 @@ void movePawn(piece selectedPiece,int index,int posX,char posY)//done
             {
                 availablePositions[0] = selectedPiece.posX - 1;
                 availablePositions[1] = selectedPiece.posY;
+                if(selectedPiece.posX == 7)
+                {
+                    availablePositions[2] = selectedPiece.posX - 2;
+                    availablePositions[3] = selectedPiece.posY;
+                }
                 if(selectedPiece.posY != 'A' && selectedPiece.posY !='H')
                 {
                     availablePositionsAttack[0] = selectedPiece.posX - 1;
@@ -615,6 +690,11 @@ void movePawn(piece selectedPiece,int index,int posX,char posY)//done
             {
                 availablePositions[0] = selectedPiece.posX + 1;
                 availablePositions[1] = selectedPiece.posY;
+                if(selectedPiece.posX == 2)
+                {
+                    availablePositions[2] = selectedPiece.posX + 2;
+                    availablePositions[3] = selectedPiece.posY;
+                }
 
                 if(selectedPiece.posY != 'A' && selectedPiece.posY !='H')
                 {
@@ -642,8 +722,8 @@ void movePawn(piece selectedPiece,int index,int posX,char posY)//done
             //printf("-> %d %c\n",availablePositions[0],availablePositions[1]);
             if(whiteTurn == true)
             {
-                bool found1,found2;//found eatable pieces;
-                bool found3 = false;//found forward enemy or ally piece 
+                bool found1,found2;//found enemy pieces;
+                bool found3 = false,found4 = false;//found forward enemy or ally piece 
 
                 for(int i = 0; i < sizeof pieces2/sizeof pieces2[0];i++)
                 {
@@ -653,6 +733,13 @@ void movePawn(piece selectedPiece,int index,int posX,char posY)//done
                         found3 = true;
                         availablePositions[0] = 0;
                         availablePositions[1] = 0;
+                    }
+
+                    if((pieces2[i].posX == availablePositions[2] && pieces2[i].posY == availablePositions[3]) || (pieces1[i].posX == availablePositions[2] && pieces1[i].posY == availablePositions[3]))
+                    {
+                        found4 = true;
+                        availablePositions[2] = 0;
+                        availablePositions[3] = 0;
                     }
 
                     if(pieces2[i].posX == availablePositionsAttack[0] && pieces2[i].posY == availablePositionsAttack[1])
@@ -684,12 +771,16 @@ void movePawn(piece selectedPiece,int index,int posX,char posY)//done
                 {
                     printf("-> %d %c\n",availablePositions[0],availablePositions[1]);
                 }
+                if(found3 == false)
+                {
+                    printf("-> %d %c\n",availablePositions[2],availablePositions[3]);
+                }
 
             }
             else if(whiteTurn ==false)
             {
                 bool found1,found2;//found eatable enemy piece
-                bool found3 = false;//found forward enemy or ally piece
+                bool found3 = false, found4 = false;//found forward enemy or ally piece
                 for(int i = 0; i< sizeof pieces1/sizeof pieces1[0];i++)
                 {      
                     if((pieces1[i].posX == availablePositions[0] && pieces1[i].posY == availablePositions[1]) || (pieces2[i].posX == availablePositions[0] && pieces2[i].posY == availablePositions[1]))
@@ -697,6 +788,13 @@ void movePawn(piece selectedPiece,int index,int posX,char posY)//done
                         found3 = true;
                         availablePositions[0] = 0;
                         availablePositions[1] = 0;
+                    }
+
+                    if((pieces1[i].posX == availablePositions[2] && pieces1[i].posY == availablePositions[3]) || (pieces2[i].posX == availablePositions[2] && pieces2[i].posY == availablePositions[3]))
+                    {
+                        found4 = true;
+                        availablePositions[2] = 0;
+                        availablePositions[3] = 0;
                     }
 
                     if(pieces1[i].posX == availablePositionsAttack[0] && pieces1[i].posY == availablePositionsAttack[1])
@@ -727,11 +825,15 @@ void movePawn(piece selectedPiece,int index,int posX,char posY)//done
                 {
                     printf("-> %d %c\n",availablePositions[0],availablePositions[1]);
                 }
+                if(found4 == false)
+                {
+                    printf("-> %d %c\n",availablePositions[2],availablePositions[3]);
+                }
             }
             
 
             //get position inputed by player
-            if(!(availablePositions[0] == 0 && availablePositions[1] == 0) || !(availablePositionsAttack[0] == 0 && availablePositionsAttack[1] == 0) || !(availablePositionsAttack[2] == 0 && availablePositionsAttack[3] == 0))
+            if(!(availablePositions[0] == 0 && availablePositions[1] == 0) || !(availablePositions[2] == 0 && availablePositions[3] == 0) || !(availablePositionsAttack[0] == 0 && availablePositionsAttack[1] == 0) || !(availablePositionsAttack[2] == 0 && availablePositionsAttack[3] == 0))
             {
                 bool checkPosX= false;
                 bool checkPosY= false;
