@@ -16,7 +16,7 @@ int main(void)
     {        
         saveGame();
         confirmContinueGame();
-        movePiece();
+        movePiece();        
         //checkKing(turn)
     }    
     return 0;
