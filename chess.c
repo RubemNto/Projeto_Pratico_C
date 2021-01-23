@@ -115,7 +115,7 @@ void checkGame()//check if game is over by checking if the king still exists in 
     bool foundKingB;
     for (int i = 0; i < sizeof pieces1/sizeof pieces1[0]; i++)
     {
-        if(pieces1[i].costume == 'K')
+        if(pieces1[i].costume == 'K' && pieces1[i].posX != 0 && pieces1[i].posY != 0)
         {
             foundKingW = true;
             break;
@@ -123,7 +123,7 @@ void checkGame()//check if game is over by checking if the king still exists in 
     }
     for (int i = 0; i < sizeof pieces2/sizeof pieces2[0]; i++)
     {
-        if(pieces2[i].costume == 'k')
+        if(pieces2[i].costume == 'k' && pieces1[i].posX != 0 && pieces1[i].posY != 0)
         {
             foundKingB = true;
             break;
