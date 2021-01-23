@@ -43,13 +43,13 @@ void saveGame()
 	fclose(gameData);
 }
 
+
 void loadGame()
 {
 	char fileLocation[200] = "";
 	char data[67][6];
 	piece tempPieces1[16];
 	piece tempPieces2[16];
-	char LIXO[20];
 	printf("Write location of data file: ");
 	gets(fileLocation);
 

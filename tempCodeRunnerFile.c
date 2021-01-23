@@ -1,0 +1,1 @@
+ pieces1[i].posX
