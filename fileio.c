@@ -48,7 +48,6 @@ void loadGame()
 	char data[67][6];
 	piece tempPieces1[16];
 	piece tempPieces2[16];
-	char LIXO[20];
 	printf("Write location of data file: ");
 	gets(fileLocation);
 
@@ -59,7 +58,6 @@ void loadGame()
 		exit(1);             
 	}else
 	{
-		int counter;
 		for (int i = 0; i < 16; i++)
 		{
 			fscanf(fp," %c",&(tempPieces1[i].costume)); 
