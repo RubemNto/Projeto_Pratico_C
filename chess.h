@@ -13,7 +13,7 @@ typedef struct
 }player;
 
 void createTable();
-void loadTable(piece _pieces1[], piece _pieces2[]);
+//void loadTable(piece _pieces1[], piece _pieces2[]);
 void reCreateTable();
 void writeRandom();
 void writeCoordinatesOfPieces(FILE *savedData);

@@ -8,9 +8,9 @@ int main(void)
 {
     bool playing = true;
     // createPlayers();
-    setWhite();    
-    loadGame();
-    //createTable();
+    // setWhite();    
+    // loadGame();
+    createTable();
     while(playing)
     {        
        // saveGame();
