@@ -7,10 +7,10 @@
 int main(void)
 {
     bool playing = true;
-    //createPlayers();
-    //setWhite();    
-    loadGame();
-    //createTable();
+    createPlayers();
+    setWhite();    
+    //loadGame();
+    createTable();
     while(playing)
     {        
         saveGame();

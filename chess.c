@@ -36,16 +36,10 @@ void writeCoordinatesOfPieces(FILE *savedData)//writes the coordinates of pieces
 
 void writePlayerTurn(FILE *savedData)//writes the game turn in game file
 {
-    fprintf(&*savedData,"%d\n",whiteTurn);
-    fprintf(&*savedData, "White - %s\n",players[0].nickname);
-    fprintf(&*savedData, "Black - %s\n",players[1].nickname);
+    fprintf(&*savedData, "%d\n", whiteTurn);
+    fprintf(&*savedData, "%s\n", players[0].nickname);
+    fprintf(&*savedData, "%s\n", players[1].nickname);
 }
-
-// void writePlayersNickname(FILE *savedData){
-
-//     fprintf(&*savedData, "white - %c",players[0].nickname);
-//     fprintf(&*savedData, "black - %c",players[1].nickname);
-// }
 
 void createPlayers(){
                             //CYCLE TO REQUEST FOR PLAYER'S NICKNAME AND STORE IT IN """THE PLAYERSLIST"""
@@ -250,11 +244,16 @@ void createTable()//creates a new game table with new pieces and positions
     }
 }
 
-void loadTable(piece _pieces1[], piece _pieces2[])
+void loadTable(piece _pieces1[], piece _pieces2[], player tempPlayers[], int vez)
 {
 
-    // if(tempFirst == 1 ) {whiteTurn = true;}
-    // else{whiteTurn = false;}
+    if(vez == 1 ) {whiteTurn = true;}
+    else{whiteTurn = false;}
+
+    for (int i = 0; i < 2; i++)
+    {
+        strcpy(players[i].nickname, tempPlayers[i].nickname); 
+    }  
 
     for(int i = 0; i < 16; i++){
 
@@ -267,28 +266,72 @@ void loadTable(piece _pieces1[], piece _pieces2[])
         pieces2[i].posX = _pieces2[i].posX;
         pieces2[i].posY = _pieces2[i].posY;
 
-
-
-        printf("%c %d",pieces1[i].costume,i);
+        printf("Posições das peças brancas\n");
+        printf("%c ",pieces1[i].costume);
         printf("%d ",pieces1[i].posX);
-        printf("%c\n",pieces1[i].posY); 
-        printf("\n");
-    }
-
-    printf("Peças pretas DIVISÃO");
-
-    for (int i = 0; i < 16 ; i++)
-    {
-        printf("%c %d",pieces2[i].costume,i);
+        printf("%d\n\n",pieces1[i].posY);
+        printf("Posições das peças \n");
+        printf("%c ",pieces2[i].costume);
         printf("%d ",pieces2[i].posX);
-        printf("%c\n",pieces2[i].posY); 
-        printf("\n");
+        printf("%d\n\n",pieces2[i].posY);
+
     }
+
 
     reCreateTable();
 }
 
+char lookForPiece(int posX, int posY){
+
+    for(int i = 0; i < 32 ; i++){
+
+        if(i < 16){
+
+            //printf("%d %d", pieces1[i].posX , pieces1[i].posY - 64);
+            if(pieces1[i].posX == posX && pieces1[i].posY == posY){
+
+                return pieces1[i].costume;
+            }
+        }else{
+            //printf("%d %d", pieces2[i-16].posX , pieces2[i-16].posY - 64);
+            if(pieces2[i-16].posX == posX && pieces2[i-16].posY == posY ){
+
+                return pieces2[i-16].costume;
+            }
+        }
+    }
+    return 'x';
+}
+
 void reCreateTable()//recreates the table given the positions of the pieces in the table if the match 
+{
+    
+    system("cls");
+    printf("   A");
+    for (int i = 'B'; i <= 'H'; i++)
+    {
+        printf("  %c",i);
+    }
+    printf("\n");
+    
+    for (int l = 1; l <= 8; l++)
+    {
+        printf("%d ", l);
+        for (int c = 65; c <= 72; c++)
+        {
+            char foundPiece = lookForPiece(l, c) ;
+            if(foundPiece != 'x' ){
+                printf("[%c]",foundPiece);
+            }else
+            {
+                printf("[ ]");
+            }                                 
+        }
+        printf("\n");
+    }    
+}
+
+/*void reCreateTable()//recreates the table given the positions of the pieces in the table if the match 
 {
     bool foundPiece;
     system("cls");
@@ -326,7 +369,7 @@ void reCreateTable()//recreates the table given the positions of the pieces in t
         }
         printf("\n");
     }    
-}
+}*/
 
 void movePiece()
 {

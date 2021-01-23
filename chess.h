@@ -18,13 +18,14 @@ void reCreateTable();
 void writeRandom();
 void writeCoordinatesOfPieces(FILE *savedData);
 void writePlayerTurn(FILE *savedData);
+char lookForPiece(int posX, int posY);
 //void writePlayersNickname(FILE *savedData);
 void movePiece();
 
 void createPlayers();
 void setWhite();
 void checkGame();
-void loadTable(piece _pieces1[], piece _pieces2[]);
+void loadTable(piece _pieces1[], piece _pieces2[], player tempPlayers[2], int vez);
 
 
 void movePawn(piece selectedPiece,int index,int posX,char posY);
