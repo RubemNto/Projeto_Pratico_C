@@ -68,8 +68,16 @@ void writeCoordinatesOfPieces(FILE *savedData)//writes the coordinates of pieces
 
 void writePlayerTurn(FILE *savedData)//writes the game turn in game file
 {
-    fprintf(&*savedData,"%d",whiteTurn);
+    fprintf(&*savedData,"%d\n",whiteTurn);
+    fprintf(&*savedData, "White - %s\n",players[0].nickname);
+    fprintf(&*savedData, "Black - %s\n",players[1].nickname);
 }
+
+// void writePlayersNickname(FILE *savedData){
+
+//     fprintf(&*savedData, "white - %c",players[0].nickname);
+//     fprintf(&*savedData, "black - %c",players[1].nickname);
+// }
 
 void createPlayers(){
                             //CYCLE TO REQUEST FOR PLAYER'S NICKNAME AND STORE IT IN """THE PLAYERSLIST"""
@@ -276,8 +284,12 @@ void createTable()//creates a new game table with new pieces and positions
     }
 }
 
-void loadTable(piece _pieces1[], piece _pieces2[] )
+void loadTable(piece _pieces1[], piece _pieces2[])
 {
+
+    // if(tempFirst == 1 ) {whiteTurn = true;}
+    // else{whiteTurn = false;}
+
     for(int i = 0; i < 16; i++){
 
 

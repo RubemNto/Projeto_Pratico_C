@@ -40,6 +40,7 @@ void saveGame()
 	gameData = fopen("GameData.txt","w");
 	writeCoordinatesOfPieces(gameData);
 	writePlayerTurn(gameData);
+	//writePlayersNickname(gameData);
 	fclose(gameData);
 }
 
