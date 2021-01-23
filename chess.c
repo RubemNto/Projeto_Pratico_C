@@ -87,10 +87,12 @@ void checkGame()//check if game is over by checking if the king still exists in 
     if(foundKingW && !foundKingB)
     {
         printf("%s won the match\nCongratulations!",players[0].nickname);
+        exit(1);
     }
     else if(!foundKingW && foundKingB)
     {
         printf("%s won the match\nCongratulations!",players[1].nickname);
+        exit(1);
     }    
 }
 
@@ -239,6 +241,40 @@ void createTable()//creates a new game table with new pieces and positions
             printf("\n");    
         }
     }
+}
+
+void loadTable(piece _pieces1[], piece _pieces2[] )
+{
+    for(int i = 0; i < 16; i++){
+
+
+        pieces1[i].costume = _pieces1[i].costume;
+        pieces1[i].posX = _pieces1[i].posX;
+        pieces1[i].posY = _pieces1[i].posY;
+
+        pieces2[i].costume = _pieces2[i].costume;
+        pieces2[i].posX = _pieces2[i].posX;
+        pieces2[i].posY = _pieces2[i].posY;
+
+
+
+        printf("%c %d",pieces1[i].costume,i);
+        printf("%d ",pieces1[i].posX);
+        printf("%c\n",pieces1[i].posY); 
+        printf("\n");
+    }
+
+    printf("Peças pretas DIVISÃO");
+
+    for (int i = 0; i < 16 ; i++)
+    {
+        printf("%c %d",pieces2[i].costume,i);
+        printf("%d ",pieces2[i].posX);
+        printf("%c\n",pieces2[i].posY); 
+        printf("\n");
+    }
+
+    reCreateTable();
 }
 
 void reCreateTable()//recreates the table given the positions of the pieces in the table if the match 
