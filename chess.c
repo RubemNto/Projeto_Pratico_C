@@ -13,7 +13,6 @@ piece pieces2[16];//pretos
 
 player players[2];
 bool whiteTurn = true;
-bool winW,winB;
 
 int random;
 void writeRandom()
@@ -21,29 +20,24 @@ void writeRandom()
     printf("%d",random);
 }
 
-void writeCoordinatesOfPieces(FILE *savedData)
+void writeCoordinatesOfPieces(FILE *savedData)//writes the coordinates of pieces in game in a txt file
 {
     for (int i = 0; i < 16; i++)
     {
         fprintf(&*savedData,"%c %d %c\n",pieces1[i].costume,pieces1[i].posX,pieces1[i].posY);
-        // fprintf("%c %d %c",pieces1[i].costume,pieces1[i].posX,pieces1[i].posY);
-        // fprintf("\n");
     }
     fprintf(&*savedData,"\n");
     for (int i = 0; i < 16; i++)
     {
         fprintf(&*savedData,"%c %d %c\n",pieces2[i].costume,pieces2[i].posX,pieces2[i].posY);
-        // fprintf("%c %d %c",pieces2[i].costume,pieces2[i].posX,pieces2[i].posY);
-        // fprintf("\n");
     }
     fprintf(&*savedData,"\n");
 }
 
-void writePlayerTurn(FILE *savedData)
+void writePlayerTurn(FILE *savedData)//writes the game turn in game file
 {
     fprintf(&*savedData,"%d",whiteTurn);
 }
-
 
 void createPlayers(){
                             //CYCLE TO REQUEST FOR PLAYER'S NICKNAME AND STORE IT IN """THE PLAYERSLIST"""
@@ -69,7 +63,7 @@ void createPlayers(){
 }
 
 //--------------------   FUNCTION TO INFORM THE PLAYERS OF WHO PLAYS FIRST/ IS WHITE  ------------------//
-void checkGame()
+void checkGame()//check if game is over by checking if the king still exists in game
 {    
     bool foundKingW;
     bool foundKingB;
@@ -86,18 +80,18 @@ void checkGame()
         if(pieces2[i].costume == 'k')
         {
             foundKingB = true;
+            break;
         }
     }
     
     if(foundKingW && !foundKingB)
     {
-        winB = false;
-        winW = true;
+        printf("%s won the match\nCongratulations!",players[0].nickname);
+        exit(1);
     }
     else if(!foundKingW && foundKingB)
     {
-        winW = false;
-        winB = true;
+        printf("%s won the match\nCongratulations!",players[1].nickname);
     }    
 }
 
@@ -130,14 +124,10 @@ void setWhite(){
     }
 }
 
-void createTable()
+void createTable()//creates a new game table with new pieces and positions
 {
     srand(time(0));
-    random = rand()%2;
-    //creates a random table of black and white chess pieces represented 
-    //by lower case and upper case characters respectively on the 8x8 board
-    // piece pieces1[16];
-    // piece pieces2[16];
+    random = rand()%2;    
     char costumes[9] = {'p','r','n','b','q','k','b','n','r'};
     if(random == 0)
     {
@@ -252,13 +242,11 @@ void createTable()
     }
 }
 
-void loadTable(piece _pieces1[], piece _pieces2[] ){
-
-    
-
+void loadTable(piece _pieces1[], piece _pieces2[] )
+{
     for(int i = 0; i < 16; i++){
 
-        
+
         pieces1[i].costume = _pieces1[i].costume;
         pieces1[i].posX = _pieces1[i].posX;
         pieces1[i].posY = _pieces1[i].posY;
@@ -267,7 +255,7 @@ void loadTable(piece _pieces1[], piece _pieces2[] ){
         pieces2[i].posX = _pieces2[i].posX;
         pieces2[i].posY = _pieces2[i].posY;
 
-        
+
 
         printf("%c %d",pieces1[i].costume,i);
         printf("%d ",pieces1[i].posX);
@@ -284,16 +272,14 @@ void loadTable(piece _pieces1[], piece _pieces2[] ){
         printf("%c\n",pieces2[i].posY); 
         printf("\n");
     }
-    
-        
+
     reCreateTable();
 }
 
-void reCreateTable()
+void reCreateTable()//recreates the table given the positions of the pieces in the table if the match 
 {
-    
     bool foundPiece;
-    //system("cls");
+    system("cls");
     printf("   A");
     for (int i = 'B'; i <= 'H'; i++)
     {
@@ -330,23 +316,17 @@ void reCreateTable()
     }    
 }
 
-
-
-void setUpPieces(char dataPieces1[],char dataPieces2[])
-{
-    
-}
-
 void movePiece()
 {
-    int index = 0;
+    int index = 0;//index of selected piece
     int posX = 0;//select piece line
     char posY = 0;//select piece column
     char selectedPieceCostume = ' ';
     char answer = 0;
     piece selectedPiece;
     bool choose = false;
-    //select piece
+
+//select piece
     //receive coordinates from the table and verify if exists in the table
     if(whiteTurn == true)
     {
@@ -386,16 +366,10 @@ void movePiece()
             if(pieces1[i].posX == posX && pieces1[i].posY == posY)
             {
                 selectedPieceCostume = pieces1[i].costume;
-                // selectedPiece.costume = pieces1[i].costume;
-                // selectedPiece.posX = posX;
-                // selectedPiece.posY = posY;
                 break;
             }else if(pieces2[i].posX == posX && pieces2[i].posY == posY)
             {
                 selectedPieceCostume = pieces2[i].costume;
-                // selectedPiece.costume = pieces2[i].costume;
-                // selectedPiece.posX = posX;
-                // selectedPiece.posY = posY;
                 break;
             }
         }
@@ -461,17 +435,47 @@ void movePiece()
             }
         }                
     }
-    printf("Selected Piece Index(%d) %c(%d,%c)\n",index,selectedPiece.costume,selectedPiece.posX,selectedPiece.posY);
-    
-    //show possible coordinates
+
     posX = 0;//select new line to move
     posY = 0;//select new column to move
     
         if(selectedPiece.costume == 'p' || selectedPiece.costume == 'P')//movement of pawn
         {
             //-> move forawrd only once
-            //write available spaces
-            int availablePositionsAttack[4] ={0};
+            movePawn(selectedPiece,index,posX,posY);            
+        }
+        else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')//movement rook
+        {
+            moveRook(selectedPiece,index,posX,posY);          
+        }
+        else if(selectedPiece.costume == 'n' || selectedPiece.costume == 'N')//movement of knight
+        {
+            //-> move in L chape 
+            moveKnight(selectedPiece,index,posX,posY);         
+        }
+        else if(selectedPiece.costume == 'b' || selectedPiece.costume == 'B')//movement of bishop
+        {
+            //-> moves diagonaly
+            moveBishop(selectedPiece,index,posX,posY);
+        }
+        else if(selectedPiece.costume == 'q' || selectedPiece.costume == 'Q')//movement of Queen
+        {
+            //-> moves at any direction as many spaces as needed
+            moveQueen(selectedPiece,index,posX,posY);
+        }
+        else if(selectedPiece.costume == 'k' || selectedPiece.costume == 'K')//movement of King
+        {
+            //-> moves at any direction only once
+            moveKing(selectedPiece,index,posX,posY);
+        }
+        
+        reCreateTable();
+        whiteTurn = !whiteTurn;    
+}
+
+void movePawn(piece selectedPiece,int index,int posX,char posY)//done
+{
+    int availablePositionsAttack[4] ={0};
             int availablePositions[2] = {0};
             int enemyIndex1 = 0,enemyIndex2 = 0;
             if(random == 0 && whiteTurn == true)
@@ -769,287 +773,300 @@ void movePiece()
                     pieces2[index].posY = posY;
                 }                                
             }
-        }
-        else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')//movement rook
+}
+
+void moveRook(piece selectedPiece,int index,int posX,char posY)//done
+{
+    int positionsTop[7][2] = {0};
+    int positionsBottom[7][2] = {0};
+    int positionsLeft[7][2] = {0};
+    int positionsRight[7][2] = {0};
+    bool foundPiece = false;
+    bool existsPositions = false;
+
+    for (int i = 0; i < 7; i++)//top positions
+    {
+        if(selectedPiece.posX-(i+1) >= 1)
         {
-            int diferenceTop = selectedPiece.posX - 1;
-            int diferenceRight = 'H' - selectedPiece.posY;
-            int diferenceBottom = 8 - selectedPiece.posX;
-            int diferenceLeft = selectedPiece.posY - 'A';
-            //int availablePositions[14][2] = {0};
-            
-            int availablePositionsTop[7][2] = {0};
-            int availablePositionsBottom[7][2] = {0};
-            int availablePositionsRight[7][2] = {0};
-            int availablePositionsLeft[7][2] = {0};
-            //int counter = 0;
-
-            bool foundPiece = false;
-
-            // printf("%d",diferenceTop);    
-            for(int i = 0; i<diferenceTop;i++)//positions on top of tower
+            for (int p = 0; p < 16; p++)
             {
-                for(int p = 0;p < 16;p++)
-                {
-                    if(whiteTurn == true)
-                    {
-                        if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY)
-                        {
-                            foundPiece = true;
-                            availablePositionsTop[i][0] = 0;
-                            availablePositionsTop[i][1] = 0;
-                            // counter++;
-                            break;
-                        }
-                        else if(foundPiece == false)
-                        {
-                            availablePositionsTop[i][0] = selectedPiece.posX-(i+1);
-                            availablePositionsTop[i][1] = selectedPiece.posY;
-                            //counter++;
-                        }
-                    }else if(whiteTurn == false)
-                    {
-                        if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY)
-                        {
-                            foundPiece = true;
-                            availablePositionsTop[i][0] = 0;
-                            availablePositionsTop[i][1] = 0;
-                            // counter++;
-                            break;
-                        }
-                        else if(foundPiece == false)
-                        {
-                            availablePositionsTop[i][0] = selectedPiece.posX-(i+1);
-                            availablePositionsTop[i][1] = selectedPiece.posY;
-                            //counter++;
-                        }
-                    }                    
-                }
-            }
-
-            //printf("%d\n",counter);
-            foundPiece = false;            
-            for(int i = 0; i<diferenceBottom;i++)//positions on bottom of tower
-            {
-                for(int p = 0;p < 16;p++)
-                {
-                    if(whiteTurn == true)
-                    {
-                        if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY)
-                        {
-                            foundPiece = true;
-                            availablePositionsBottom[i][0] = 0;
-                            availablePositionsBottom[i][1] = 0;
-                            //counter++;
-                            break;
-                        }
-                        else if(foundPiece == false)
-                        {
-                            availablePositionsBottom[i][0] = selectedPiece.posX+(i+1);
-                            availablePositionsBottom[i][1] = selectedPiece.posY;
-                            //counter++;
-                        }
-                    }else if(whiteTurn == false)
-                    {
-                        if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY)
-                        {
-                            foundPiece = true;
-                            availablePositionsBottom[i][0] = 0;
-                            availablePositionsBottom[i][1] = 0;
-                            //counter++;
-                            break;
-                        }
-                        else if(foundPiece == false)
-                        {
-                            availablePositionsBottom[i][0] = selectedPiece.posX+(i+1);
-                            availablePositionsBottom[i][1] = selectedPiece.posY;
-                            //counter++;
-                        }
-                    }        
-                }
-            }
-            // printf("%d\n",counter);
-            //foundPiece = false;
-            for(int i = 0; i<diferenceRight;i++)//positions on bottom of tower
-            {
-                for(int p = 0;p < 16;p++)
-                {
-                    if(whiteTurn == true)
-                    {
-                        if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY+(i+1))
-                        {
-                            foundPiece = true;
-                            availablePositionsRight[i][0] = 0;
-                            availablePositionsRight[i][1] = 0;
-                            // counter++;
-                            break;
-                        }
-                        else if(foundPiece == false)
-                        {
-                            availablePositionsRight[i][0] = selectedPiece.posX;
-                            availablePositionsRight[i][1] = selectedPiece.posY+(i+1);
-                            // counter++;
-                        }
-                    }else if(whiteTurn == false)
-                    {
-                        printf("Passei aqui1!\n");
-                        if(pieces2[p].posX == selectedPiece.posX && pieces2[p].posY == selectedPiece.posY+(i+1))
-                        {
-                            printf("Passei aqui2!\n");
-                            foundPiece = true;
-                            availablePositionsRight[i][0] = 0;
-                            availablePositionsRight[i][1] = 0;
-                            // counter++;
-                            break;
-                        }
-                        else if(foundPiece == false)
-                        {
-                            printf("Passei aqui3!\n");
-                            availablePositionsRight[i][0] = selectedPiece.posX;
-                            availablePositionsRight[i][1] = selectedPiece.posY+(i+1);
-                            // counter++;
-                        }
-                    }        
-                }
-            }
-            foundPiece = false;
-            for(int i = 0; i<diferenceLeft;i++)//positions on bottom of tower
-            {
-                for(int p = 0;p < 16;p++)
-                {
-                    if(whiteTurn == true)
-                    {
-                        if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY-(i+1))
-                        {
-                            foundPiece = true;
-                            availablePositionsLeft[i][0] = 0;
-                            availablePositionsLeft[i][1] = 0;
-                            // counter++;
-                            break;
-                        }
-                        else if(foundPiece == false)
-                        {
-                            availablePositionsLeft[i][0] = selectedPiece.posX;
-                            availablePositionsLeft[i][1] = selectedPiece.posY-(i+1);
-                            // counter++;
-                        }
-                    }else if(whiteTurn == false)
-                    {
-                        if(pieces2[p].posX == selectedPiece.posX && pieces2[p].posY == selectedPiece.posY-(i+1))
-                        {
-                            foundPiece = true;
-                            availablePositionsLeft[i][0] = 0;
-                            availablePositionsLeft[i][1] = 0;
-                            // counter++;
-                            break;
-                        }
-                        else if(foundPiece == false)
-                        {
-                            availablePositionsLeft[i][0] = selectedPiece.posX;
-                            availablePositionsLeft[i][1] = selectedPiece.posY-(i+1);
-                            // counter++;
-                        }
-                    }        
-                }
-            }
-
-            bool foundPosition = false;
-
-            for(int i = 0;i<7;i++)
-            {
-                if(availablePositionsTop[i][0] != 0 && availablePositionsTop[i][1] != 0)
-                {
-                    printf("-> %d %c\n",availablePositionsTop[i][0],availablePositionsTop[i][1]);
-                    foundPosition = true;
-                }
-            }
-
-            for(int i = 0;i<7;i++)
-            {
-                if(availablePositionsBottom[i][0] != 0 && availablePositionsBottom[i][1] != 0)
-                {
-                    printf("-> %d %c\n",availablePositionsBottom[i][0],availablePositionsBottom[i][1]);
-                    foundPosition = true;
-                }
-            }
-
-            for(int i = 0;i<7;i++)
-            {
-                if(availablePositionsLeft[i][0] != 0 && availablePositionsLeft[i][1] != 0)
-                {
-                    printf("-> %d %c\n",availablePositionsLeft[i][0],availablePositionsLeft[i][1]);
-                    foundPosition = true;
-                }
-            }
-
-            for(int i = 0;i<7;i++)
-            {
-                if(availablePositionsRight[i][0] != 0 && availablePositionsRight[i][1] != 0)
-                {
-                    printf("-> %d %c\n",availablePositionsRight[i][0],availablePositionsRight[i][1]);
-                    foundPosition = true;
-                }
-            }
-
-            bool checkPosX = false;
-            bool checkPosY = false;
-            if(foundPosition)
-            {
-                do
-                {
-                    printf("Select Line: ");
-                    scanf("%d",&posX);
-                    for(int l = 0; l < 14;l++)
-                    {
-                        if((posX == availablePositionsTop[l][0] || posX == availablePositionsBottom[l][0] || posX == availablePositionsLeft[l][0] || posX == availablePositionsRight[l][0]) && posX != 0)
-                        {
-                            checkPosX = true;
-                            break;
-                        }
-                    }
-                    if(checkPosX == false)
-                    {
-                        printf("Not available line for movement\n");
-                    }
-                    
-                } while (checkPosX == false);
-                
-                do
-                {
-                    printf("Select Column: ");
-                    scanf(" %c",&posY);
-                    posY = toupper(posY);
-                    for(int l = 0; l < 14;l++)
-                    {
-                        if((posY == availablePositionsTop[l][1] || posY == availablePositionsBottom[l][1] || posY == availablePositionsLeft[l][1] || posY == availablePositionsRight[l][1]) && posY != 0)
-                        {
-                            checkPosY = true;
-                            break;
-                        }                    
-                    }
-                    if(checkPosY == false)
-                    {
-                        printf("Not available column for movement\n");
-                    }
-                    
-                } while (checkPosY == false);
-
                 if(whiteTurn == true)
                 {
-                    pieces1[index].posX = posX;
-                    pieces1[index].posY = posY;
-
-                }else
-                {
-                    pieces2[index].posX = posX;
-                    pieces2[index].posY = posY;
+                    if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }
+                    else if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        positionsTop[i][0] = selectedPiece.posX-(i+1);
+                        positionsTop[i][1] = selectedPiece.posY;
+                        foundPiece = true;
+                    }         
                 }
-            }            
+                else
+                {
+                    if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                    }
+                    else if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        positionsTop[i][0] = selectedPiece.posX-(i+1);
+                        positionsTop[i][1] = selectedPiece.posY;
+                        foundPiece = true;
+                    }
+                }                
+            }
+            if(foundPiece == false)
+            {
+                // printf("%d %c\n",selectedPiece.posX-(i+1),selectedPiece.posY);
+                positionsTop[i][0] = selectedPiece.posX-(i+1);
+                positionsTop[i][1] = selectedPiece.posY;
+            }
+            
         }
-        else if(selectedPiece.costume == 'n' || selectedPiece.costume == 'N')//movement of knight
+    }
+    foundPiece = false;
+    for (int i = 0; i < 7; i++)//bottom positions
+    {
+        if(selectedPiece.posX+(i+1) <= 8)
         {
-            //-> move in L chape 
-            int availablePositions[8][2] = {0};
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn == true)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }
+                    else if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        positionsBottom[i][0] = selectedPiece.posX+(i+1);
+                        positionsBottom[i][1] = selectedPiece.posY;
+                        foundPiece = true;
+                    }           
+                }
+                else
+                {
+                    if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                    } 
+                    else if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        positionsBottom[i][0] = selectedPiece.posX+(i+1);
+                        positionsBottom[i][1] = selectedPiece.posY;
+                        foundPiece = true;
+                    }
+                }                
+            }
+            if(foundPiece == false)
+            {
+                // printf("%d %c\n",selectedPiece.posX+(i+1),selectedPiece.posY);
+                positionsBottom[i][0] = selectedPiece.posX+(i+1);
+                positionsBottom[i][1] = selectedPiece.posY;
+            }
+            
+        }
+    }
+    foundPiece = false;
+    for (int i = 0; i < 7; i++)//Right positions
+    {
+        if(selectedPiece.posY+(i+1) <= 'H')
+        {
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn == true)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }else if(pieces2[p].posX == selectedPiece.posX && pieces2[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        positionsRight[i][0] = selectedPiece.posX;
+                        positionsRight[i][1] = selectedPiece.posY+(i+1);
+                        foundPiece = true;
+                    }           
+                }
+                else
+                {
+                    if(pieces2[p].posX == selectedPiece.posX && pieces2[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                    }else if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        positionsRight[i][0] = selectedPiece.posX;
+                        positionsRight[i][1] = selectedPiece.posY+(i+1);
+                        foundPiece = true;
+                    } 
+                }                
+            }
+            if(foundPiece == false)
+            {
+                // printf("%d %c\n",selectedPiece.posX,selectedPiece.posY+(i+1));
+                positionsRight[i][0] = selectedPiece.posX;
+                positionsRight[i][1] = selectedPiece.posY+(i+1);
+            }
+            
+        }
+    }
+    foundPiece = false;
+    for (int i = 0; i < 7; i++)//Left positions
+    {
+        if(selectedPiece.posY-(i+1) >= 'A')
+        {
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn == true)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }else if(pieces2[p].posX == selectedPiece.posX && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        positionsLeft[i][0] = selectedPiece.posX;
+                        positionsLeft[i][1] = selectedPiece.posY-(i+1);
+                        foundPiece = true;
+                    }           
+                }
+                else
+                {
+                    if(pieces2[p].posX == selectedPiece.posX && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                    }else if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        positionsLeft[i][0] = selectedPiece.posX;
+                        positionsLeft[i][1] = selectedPiece.posY-(i+1);
+                        foundPiece = true;
+                    }
+                }                
+            }
+            if(foundPiece == false)
+            {
+                // printf("%d %c\n",selectedPiece.posX,selectedPiece.posY-(i+1));
+                positionsLeft[i][0] = selectedPiece.posX;
+                positionsLeft[i][1] = selectedPiece.posY-(i+1);
+            }
+            
+        }
+    }
+
+    for (int i = 0; i < 7; i++)
+    {        
+        if(positionsTop[i][0] != 0 && positionsTop[i][1] != 0)
+        {
+            printf("-> %d %c\n",positionsTop[i][0],positionsTop[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(positionsBottom[i][0] != 0 && positionsBottom[i][1] != 0)
+        {
+            printf("-> %d %c\n",positionsBottom[i][0],positionsBottom[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(positionsRight[i][0] != 0 && positionsRight[i][1] != 0)
+        {
+            printf("-> %d %c\n",positionsRight[i][0],positionsRight[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(positionsLeft[i][0] != 0 && positionsLeft[i][1] != 0)
+        {
+            printf("-> %d %c\n",positionsLeft[i][0],positionsLeft[i][1]);
+            existsPositions = true;
+        }
+    }
+    
+    if(existsPositions == true)
+    {
+        bool checkPosX = false;
+        bool checkPosY = false;
+        do
+        {
+            printf("Select line: ");
+            scanf("%d",&posX);
+            for (int i = 0; i < 7; i++)
+            {
+                if((positionsTop[i][0] == posX || positionsRight[i][0] == posX || positionsBottom[i][0] == posX || positionsLeft[i][0] == posX) && posX != 0)
+                {
+                    checkPosX = true;
+                }
+            }
+            
+        } while (checkPosX == false);
+
+        do
+        {
+            printf("Select Column: ");
+            scanf(" %c",&posY);
+            posY = toupper(posY);
+            for (int i = 0; i < 7; i++)
+            {
+                if((positionsTop[i][1] == posY || positionsRight[i][1] == posY || positionsBottom[i][1] == posY || positionsLeft[i][1] == posY) && posY != 0)
+                {
+                    checkPosY = true;
+                }
+            }
+        } while (checkPosY == false);
+
+        if(whiteTurn == true)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                if(pieces2[i].posX == posX && pieces2[i].posY == posY)
+                {
+                    pieces2[i].posX = 0;
+                    pieces2[i].posY = 0;
+                }
+            }
+
+            pieces1[index].posX = posX;
+            pieces1[index].posY = posY;
+        }
+        else if(whiteTurn == false)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                if(pieces1[i].posX == posX && pieces1[i].posY == posY)
+                {
+                    pieces1[i].posX = 0;
+                    pieces1[i].posY = 0;
+                }
+            }
+
+            pieces2[index].posX = posX;
+            pieces2[index].posY = posY;
+        }        
+    }    
+}
+
+void moveKnight(piece selectedPiece,int index,int posX,char posY)//done
+{
+    int availablePositions[8][2] = {0};
             bool checkPosX = false;
             bool checkPosY = false;
             availablePositions[0][0] = selectedPiece.posX+2;
@@ -1203,20 +1220,847 @@ void movePiece()
                     pieces2[index].posX = posX;
                     pieces2[index].posY = posY;                
                 }
-            }            
-        }
-        else if(selectedPiece.costume == 'b' || selectedPiece.costume == 'B')//movement of bishop
+            }                
+}
+
+void moveBishop(piece selectedPiece,int index,int posX,char posY)//done
+{
+    int availablePositionsDiagonal1Up[7][2] = {0};
+    int availablePositionsDiagonal1Down[7][2] = {0};
+    
+    int availablePositionsDiagonal2Up[7][2] = {0};
+    int availablePositionsDiagonal2Down[7][2] = {0};
+    bool existsPositions = false;
+    bool foundPiece = false;
+
+    ////check diagonal 1
+
+    for (int i = 0; i < 7; i++)
+    {
+        if(selectedPiece.posX+(i+1) <= 8 && selectedPiece.posY-(i+1) >= 'A')
         {
-            //-> moves diagonaly
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }else if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        availablePositionsDiagonal1Down[i][0] = selectedPiece.posX+(i+1);
+                        availablePositionsDiagonal1Down[i][1] = selectedPiece.posY-(i+1);
+                        foundPiece = true;
+                    }
+                }
+                else if(whiteTurn == false)
+                {
+                    if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;                        
+                    }else if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        availablePositionsDiagonal1Down[i][0] = selectedPiece.posX+(i+1);
+                        availablePositionsDiagonal1Down[i][1] = selectedPiece.posY-(i+1);
+                        foundPiece = true;
+                    }
+                }
+            }
+            if(foundPiece == false)
+            {
+                availablePositionsDiagonal1Down[i][0] = selectedPiece.posX+(i+1);
+                availablePositionsDiagonal1Down[i][1] = selectedPiece.posY-(i+1);
+                //printf("%d %c\n",selectedPiece.posX+(i+1),selectedPiece.posY-(i+1));
+            }
+            
         }
-        else if(selectedPiece.costume == 'q' || selectedPiece.costume == 'Q')//movement of Queen
+    }
+    foundPiece = false;
+    for (int i = 0; i < 7; i++)
+    {
+        if(selectedPiece.posX-(i+1) > 0 && selectedPiece.posY+(i+1) <= 'H')
         {
-            //-> moves at any direction as many spaces as needed
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }
+                    else if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        availablePositionsDiagonal1Up[i][0] = selectedPiece.posX-(i+1);
+                        availablePositionsDiagonal1Up[i][1] = selectedPiece.posY+(i+1);
+                        foundPiece = true;
+                    }
+                }
+                else if(whiteTurn == false)
+                {
+                    if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                    }else if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        availablePositionsDiagonal1Up[i][0] = selectedPiece.posX-(i+1);
+                        availablePositionsDiagonal1Up[i][1] = selectedPiece.posY+(i+1);
+                        foundPiece = true;
+                    }
+                }
+            }
+            if(foundPiece == false)
+            {
+                availablePositionsDiagonal1Up[i][0] = selectedPiece.posX-(i+1);
+                availablePositionsDiagonal1Up[i][1] = selectedPiece.posY+(i+1);
+                // printf("%d %c\n",selectedPiece.posX-(i+1),selectedPiece.posY+(i+1));
+            }
         }
-        else if(selectedPiece.costume == 'k' || selectedPiece.costume == 'K')//movement of King
+    }
+
+    //check diagonal 2
+    foundPiece = false;
+    for (int i = 0; i < 7; i++)
+    {
+        if(selectedPiece.posX+(i+1) <= 8 && selectedPiece.posY+(i+1) <= 'H')
         {
-            //-> moves at any direction only once
-            int availablePositions[8][2] = {0};
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }else if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        availablePositionsDiagonal2Down[i][0] = selectedPiece.posX+(i+1);
+                        availablePositionsDiagonal2Down[i][1] = selectedPiece.posY+(i+1);
+                        foundPiece = true;
+                        
+                    }
+                }
+                else if(whiteTurn == false)
+                {
+                    if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;                        
+                    }else if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        availablePositionsDiagonal2Down[i][0] = selectedPiece.posX+(i+1);
+                        availablePositionsDiagonal2Down[i][1] = selectedPiece.posY+(i+1);
+                        foundPiece = true;
+                    }
+                }
+            }
+            if(foundPiece == false)
+            {
+                availablePositionsDiagonal2Down[i][0] = selectedPiece.posX+(i+1);
+                availablePositionsDiagonal2Down[i][1] = selectedPiece.posY+(i+1);
+                // printf("%d %c\n",selectedPiece.posX+(i+1),selectedPiece.posY-(i+1));
+            }
+            
+        }
+    }
+    foundPiece = false;
+    for (int i = 0; i < 7; i++)
+    {
+        if(selectedPiece.posX-(i+1) > 0 && selectedPiece.posY-(i+1) >= 'A')
+        {
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }else if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        availablePositionsDiagonal2Up[i][0] = selectedPiece.posX-(i+1);
+                        availablePositionsDiagonal2Up[i][1] = selectedPiece.posY-(i+1);
+                        foundPiece = true;
+                    }
+                }
+                else if(whiteTurn == false)
+                {
+                    if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                    }else if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        availablePositionsDiagonal2Up[i][0] = selectedPiece.posX-(i+1);
+                        availablePositionsDiagonal2Up[i][1] = selectedPiece.posY-(i+1);
+                        foundPiece = true;
+                    }
+                }
+            }
+            if(foundPiece == false)
+            {
+                availablePositionsDiagonal2Up[i][0] = selectedPiece.posX-(i+1);
+                availablePositionsDiagonal2Up[i][1] = selectedPiece.posY-(i+1);
+                // printf("%d %c\n",selectedPiece.posX-(i+1),selectedPiece.posY+(i+1));
+            }
+        }
+    }
+
+    //Show available positions
+    for (int i = 0; i < 7; i++)
+    {        
+        if(availablePositionsDiagonal1Down[i][0] != 0 && availablePositionsDiagonal1Down[i][1] != 0)
+        {
+            printf("-> %d %c D1D\n",availablePositionsDiagonal1Down[i][0],availablePositionsDiagonal1Down[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(availablePositionsDiagonal1Up[i][0] != 0 && availablePositionsDiagonal1Up[i][1] != 0)
+        {
+            printf("-> %d %c D1U\n",availablePositionsDiagonal1Up[i][0],availablePositionsDiagonal1Up[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(availablePositionsDiagonal2Down[i][0] != 0 && availablePositionsDiagonal2Down[i][1] != 0)
+        {
+            printf("-> %d %c D2D\n",availablePositionsDiagonal2Down[i][0],availablePositionsDiagonal2Down[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(availablePositionsDiagonal2Up[i][0] != 0 && availablePositionsDiagonal2Up[i][1] != 0)
+        {
+            printf("-> %d %c D2U\n",availablePositionsDiagonal2Up[i][0],availablePositionsDiagonal2Up[i][1]);
+            existsPositions = true;
+        }
+    }     
+
+    if(existsPositions)
+    {
+        bool checkPosX = false;
+        bool checkPosY = false;
+        do
+        {
+            printf("Select line: ");
+            scanf("%d",&posX);
+            for (int i = 0; i < 7; i++)
+            {
+                if((availablePositionsDiagonal1Down[i][0] == posX || availablePositionsDiagonal1Up[i][0] == posX || availablePositionsDiagonal2Down[i][0] == posX || availablePositionsDiagonal2Up[i][0] == posX) && posX != 0)
+                {
+                    checkPosX = true;
+                }
+            }
+            
+        } while (checkPosX == false);
+
+        do
+        {
+            printf("Select Column: ");
+            scanf(" %c",&posY);
+            posY = toupper(posY);
+            for (int i = 0; i < 7; i++)
+            {
+                if((availablePositionsDiagonal1Down[i][1] == posY || availablePositionsDiagonal1Up[i][1] == posY || availablePositionsDiagonal2Down[i][1] == posY || availablePositionsDiagonal2Up[i][1] == posY) && posY != 0)
+                {
+                    checkPosY = true;
+                }
+            }
+        } while (checkPosY == false);
+
+        if(whiteTurn == true)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                if(pieces2[i].posX == posX && pieces2[i].posY == posY)
+                {
+                    pieces2[i].posX = 0;
+                    pieces2[i].posY = 0;
+                }
+            }
+
+            pieces1[index].posX = posX;
+            pieces1[index].posY = posY;
+        }
+        else if(whiteTurn == false)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                if(pieces1[i].posX == posX && pieces1[i].posY == posY)
+                {
+                    pieces1[i].posX = 0;
+                    pieces1[i].posY = 0;
+                }
+            }
+
+            pieces2[index].posX = posX;
+            pieces2[index].posY = posY;
+        }        
+    }        
+}
+
+void moveQueen(piece selectedPiece,int index,int posX,char posY)//done
+{
+    int positionsTop[7][2] = {0};
+    int positionsBottom[7][2] = {0};
+    int positionsLeft[7][2] = {0};
+    int positionsRight[7][2] = {0};
+
+    int availablePositionsDiagonal1Up[7][2] = {0};
+    int availablePositionsDiagonal1Down[7][2] = {0};
+    
+    int availablePositionsDiagonal2Up[7][2] = {0};
+    int availablePositionsDiagonal2Down[7][2] = {0};
+
+    bool foundPiece = false;
+    bool existsPositions = false;
+    
+    for (int i = 0; i < 7; i++)//top positions
+    {
+        if(selectedPiece.posX-(i+1) >= 1)
+        {
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn == true)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }
+                    else if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        positionsTop[i][0] = selectedPiece.posX-(i+1);
+                        positionsTop[i][1] = selectedPiece.posY;
+                        foundPiece = true;
+                    }         
+                }
+                else
+                {
+                    if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                    }
+                    else if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        positionsTop[i][0] = selectedPiece.posX-(i+1);
+                        positionsTop[i][1] = selectedPiece.posY;
+                        foundPiece = true;
+                    }
+                }                
+            }
+            if(foundPiece == false)
+            {
+                // printf("%d %c\n",selectedPiece.posX-(i+1),selectedPiece.posY);
+                positionsTop[i][0] = selectedPiece.posX-(i+1);
+                positionsTop[i][1] = selectedPiece.posY;
+            }
+            
+        }
+    }
+    foundPiece = false;
+    for (int i = 0; i < 7; i++)//bottom positions
+    {
+        if(selectedPiece.posX+(i+1) <= 8)
+        {
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn == true)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }
+                    else if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        positionsBottom[i][0] = selectedPiece.posX+(i+1);
+                        positionsBottom[i][1] = selectedPiece.posY;
+                        foundPiece = true;
+                    }           
+                }
+                else
+                {
+                    if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                    } 
+                    else if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        positionsBottom[i][0] = selectedPiece.posX+(i+1);
+                        positionsBottom[i][1] = selectedPiece.posY;
+                        foundPiece = true;
+                    }
+                }                
+            }
+            if(foundPiece == false)
+            {
+                // printf("%d %c\n",selectedPiece.posX+(i+1),selectedPiece.posY);
+                positionsBottom[i][0] = selectedPiece.posX+(i+1);
+                positionsBottom[i][1] = selectedPiece.posY;
+            }
+            
+        }
+    }
+    foundPiece = false;
+    for (int i = 0; i < 7; i++)//Right positions
+    {
+        if(selectedPiece.posY+(i+1) <= 'H')
+        {
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn == true)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }else if(pieces2[p].posX == selectedPiece.posX && pieces2[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        positionsRight[i][0] = selectedPiece.posX;
+                        positionsRight[i][1] = selectedPiece.posY+(i+1);
+                        foundPiece = true;
+                    }           
+                }
+                else
+                {
+                    if(pieces2[p].posX == selectedPiece.posX && pieces2[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                    }else if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        positionsRight[i][0] = selectedPiece.posX;
+                        positionsRight[i][1] = selectedPiece.posY+(i+1);
+                        foundPiece = true;
+                    } 
+                }                
+            }
+            if(foundPiece == false)
+            {
+                // printf("%d %c\n",selectedPiece.posX,selectedPiece.posY+(i+1));
+                positionsRight[i][0] = selectedPiece.posX;
+                positionsRight[i][1] = selectedPiece.posY+(i+1);
+            }
+            
+        }
+    }
+    foundPiece = false;
+    for (int i = 0; i < 7; i++)//Left positions
+    {
+        if(selectedPiece.posY-(i+1) >= 'A')
+        {
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn == true)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }else if(pieces2[p].posX == selectedPiece.posX && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        positionsLeft[i][0] = selectedPiece.posX;
+                        positionsLeft[i][1] = selectedPiece.posY-(i+1);
+                        foundPiece = true;
+                    }           
+                }
+                else
+                {
+                    if(pieces2[p].posX == selectedPiece.posX && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                    }else if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        //printf("Found Piece -> %c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        positionsLeft[i][0] = selectedPiece.posX;
+                        positionsLeft[i][1] = selectedPiece.posY-(i+1);
+                        foundPiece = true;
+                    }
+                }                
+            }
+            if(foundPiece == false)
+            {
+                // printf("%d %c\n",selectedPiece.posX,selectedPiece.posY-(i+1));
+                positionsLeft[i][0] = selectedPiece.posX;
+                positionsLeft[i][1] = selectedPiece.posY-(i+1);
+            }
+            
+        }
+    }
+    
+    //check diagonal 1
+    for (int i = 0; i < 7; i++)
+    {
+        if(selectedPiece.posX+(i+1) <= 8 && selectedPiece.posY-(i+1) >= 'A')
+        {
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        printf("Found Piece Down\n");
+                        printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }else if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        printf("Found Piece Down\n");
+                        printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        availablePositionsDiagonal1Down[i][0] = selectedPiece.posX+(i+1);
+                        availablePositionsDiagonal1Down[i][1] = selectedPiece.posY-(i+1);
+                        foundPiece = true;
+                    }
+                }
+                else if(whiteTurn == false)
+                {
+                    if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        printf("Found Piece Down\n");
+                        printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;                        
+                    }else if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        printf("Found Piece Down\n");
+                        printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        availablePositionsDiagonal1Down[i][0] = selectedPiece.posX+(i+1);
+                        availablePositionsDiagonal1Down[i][1] = selectedPiece.posY-(i+1);
+                        foundPiece = true;
+                    }
+                }
+            }
+            if(foundPiece == false)
+            {
+                availablePositionsDiagonal1Down[i][0] = selectedPiece.posX+(i+1);
+                availablePositionsDiagonal1Down[i][1] = selectedPiece.posY-(i+1);
+                //printf("%d %c\n",selectedPiece.posX+(i+1),selectedPiece.posY-(i+1));
+            }
+            
+        }
+    }
+    foundPiece = false;
+    for (int i = 0; i < 7; i++)
+    {
+        if(selectedPiece.posX-(i+1) > 0 && selectedPiece.posY+(i+1) <= 'H')
+        {
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }
+                    else if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        availablePositionsDiagonal1Up[i][0] = selectedPiece.posX-(i+1);
+                        availablePositionsDiagonal1Up[i][1] = selectedPiece.posY+(i+1);
+                        foundPiece = true;
+                    }
+                }
+                else if(whiteTurn == false)
+                {
+                    if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                    }else if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        availablePositionsDiagonal1Up[i][0] = selectedPiece.posX-(i+1);
+                        availablePositionsDiagonal1Up[i][1] = selectedPiece.posY+(i+1);
+                        foundPiece = true;
+                    }
+                }
+            }
+            if(foundPiece == false)
+            {
+                availablePositionsDiagonal1Up[i][0] = selectedPiece.posX-(i+1);
+                availablePositionsDiagonal1Up[i][1] = selectedPiece.posY+(i+1);
+                // printf("%d %c\n",selectedPiece.posX-(i+1),selectedPiece.posY+(i+1));
+            }
+        }
+    }
+    //check diagonal 2
+    foundPiece = false;
+    for (int i = 0; i < 7; i++)
+    {
+        if(selectedPiece.posX+(i+1) <= 8 && selectedPiece.posY+(i+1) <= 'H')
+        {
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }else if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        availablePositionsDiagonal2Down[i][0] = selectedPiece.posX+(i+1);
+                        availablePositionsDiagonal2Down[i][1] = selectedPiece.posY+(i+1);
+                        foundPiece = true;
+                        
+                    }
+                }
+                else if(whiteTurn == false)
+                {
+                    if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;                        
+                    }else if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY+(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Down\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        availablePositionsDiagonal2Down[i][0] = selectedPiece.posX+(i+1);
+                        availablePositionsDiagonal2Down[i][1] = selectedPiece.posY+(i+1);
+                        foundPiece = true;
+                    }
+                }
+            }
+            if(foundPiece == false)
+            {
+                availablePositionsDiagonal2Down[i][0] = selectedPiece.posX+(i+1);
+                availablePositionsDiagonal2Down[i][1] = selectedPiece.posY+(i+1);
+                // printf("%d %c\n",selectedPiece.posX+(i+1),selectedPiece.posY-(i+1));
+            }
+            
+        }
+    }
+    foundPiece = false;
+    for (int i = 0; i < 7; i++)
+    {
+        if(selectedPiece.posX-(i+1) > 0 && selectedPiece.posY-(i+1) >= 'A')
+        {
+            for (int p = 0; p < 16; p++)
+            {
+                if(whiteTurn)
+                {
+                    if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        foundPiece = true;
+                    }else if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        availablePositionsDiagonal2Up[i][0] = selectedPiece.posX-(i+1);
+                        availablePositionsDiagonal2Up[i][1] = selectedPiece.posY-(i+1);
+                        foundPiece = true;
+                    }
+                }
+                else if(whiteTurn == false)
+                {
+                    if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        foundPiece = true;
+                    }else if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
+                    {
+                        // printf("Found Piece Up\n");
+                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        availablePositionsDiagonal2Up[i][0] = selectedPiece.posX-(i+1);
+                        availablePositionsDiagonal2Up[i][1] = selectedPiece.posY-(i+1);
+                        foundPiece = true;
+                    }
+                }
+            }
+            if(foundPiece == false)
+            {
+                availablePositionsDiagonal2Up[i][0] = selectedPiece.posX-(i+1);
+                availablePositionsDiagonal2Up[i][1] = selectedPiece.posY-(i+1);
+                // printf("%d %c\n",selectedPiece.posX-(i+1),selectedPiece.posY+(i+1));
+            }
+        }
+    }
+
+    //show diagonal positions
+    for (int i = 0; i < 7; i++)
+    {        
+        if(availablePositionsDiagonal1Down[i][0] != 0 && availablePositionsDiagonal1Down[i][1] != 0)
+        {
+            printf("-> %d %c D1D\n",availablePositionsDiagonal1Down[i][0],availablePositionsDiagonal1Down[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(availablePositionsDiagonal1Up[i][0] != 0 && availablePositionsDiagonal1Up[i][1] != 0)
+        {
+            printf("-> %d %c D1U\n",availablePositionsDiagonal1Up[i][0],availablePositionsDiagonal1Up[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(availablePositionsDiagonal2Down[i][0] != 0 && availablePositionsDiagonal2Down[i][1] != 0)
+        {
+            printf("-> %d %c D2D\n",availablePositionsDiagonal2Down[i][0],availablePositionsDiagonal2Down[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(availablePositionsDiagonal2Up[i][0] != 0 && availablePositionsDiagonal2Up[i][1] != 0)
+        {
+            printf("-> %d %c D2U\n",availablePositionsDiagonal2Up[i][0],availablePositionsDiagonal2Up[i][1]);
+            existsPositions = true;
+        }
+    }     
+    //show cross positions
+    for (int i = 0; i < 7; i++)
+    {        
+        if(positionsTop[i][0] != 0 && positionsTop[i][1] != 0)
+        {
+            printf("-> %d %c\n",positionsTop[i][0],positionsTop[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(positionsBottom[i][0] != 0 && positionsBottom[i][1] != 0)
+        {
+            printf("-> %d %c\n",positionsBottom[i][0],positionsBottom[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(positionsRight[i][0] != 0 && positionsRight[i][1] != 0)
+        {
+            printf("-> %d %c\n",positionsRight[i][0],positionsRight[i][1]);
+            existsPositions = true;
+        }
+    }
+    for (int i = 0; i < 7; i++)
+    {        
+        if(positionsLeft[i][0] != 0 && positionsLeft[i][1] != 0)
+        {
+            printf("-> %d %c\n",positionsLeft[i][0],positionsLeft[i][1]);
+            existsPositions = true;
+        }
+    }
+
+    if(existsPositions)
+    {
+        bool checkPosX = false;
+        bool checkPosY = false;
+        do
+        {
+            printf("Select line: ");
+            scanf("%d",&posX);
+            for (int i = 0; i < 7; i++)
+            {
+                if((availablePositionsDiagonal1Down[i][0] == posX || availablePositionsDiagonal1Up[i][0] == posX || availablePositionsDiagonal2Down[i][0] == posX || availablePositionsDiagonal2Up[i][0] == posX || positionsTop[i][0] == posX || positionsRight[i][0] == posX || positionsBottom[i][0] == posX || positionsLeft[i][0] == posX) && posX != 0)
+                {
+                    checkPosX = true;
+                }
+            }
+            
+        } while (checkPosX == false);
+
+        do
+        {
+            printf("Select Column: ");
+            scanf(" %c",&posY);
+            posY = toupper(posY);
+            for (int i = 0; i < 7; i++)
+            {
+                if((availablePositionsDiagonal1Down[i][1] == posY || availablePositionsDiagonal1Up[i][1] == posY || availablePositionsDiagonal2Down[i][1] == posY || availablePositionsDiagonal2Up[i][1] == posY || positionsTop[i][1] == posY || positionsRight[i][1] == posY || positionsBottom[i][1] == posY || positionsLeft[i][1] == posY) && posY != 0)
+                {
+                    checkPosY = true;
+                }
+            }
+        } while (checkPosY == false);
+
+        if(whiteTurn == true)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                if(pieces2[i].posX == posX && pieces2[i].posY == posY)
+                {
+                    pieces2[i].posX = 0;
+                    pieces2[i].posY = 0;
+                }
+            }
+
+            pieces1[index].posX = posX;
+            pieces1[index].posY = posY;
+        }
+        else if(whiteTurn == false)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                if(pieces1[i].posX == posX && pieces1[i].posY == posY)
+                {
+                    pieces1[i].posX = 0;
+                    pieces1[i].posY = 0;
+                }
+            }
+
+            pieces2[index].posX = posX;
+            pieces2[index].posY = posY;
+        }        
+    }        
+}
+
+void moveKing(piece selectedPiece,int index,int posX,char posY)//done
+{
+    int availablePositions[8][2] = {0};
             bool checkPosX = false;
             bool checkPosY = false;
             availablePositions[0][0] = selectedPiece.posX+1;
@@ -1367,10 +2211,4 @@ void movePiece()
                     pieces2[index].posY = posY;                
                 }
             }          
-        }
-        
-        reCreateTable();
-        whiteTurn = !whiteTurn;    
-}
-
-    
+}    
