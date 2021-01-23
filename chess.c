@@ -647,7 +647,7 @@ void movePawn(piece selectedPiece,int index,int posX,char posY)//done
             {
                 availablePositions[0] = selectedPiece.posX + 1;
                 availablePositions[1] = selectedPiece.posY;
-                if(selectedPiece.posX == 7)
+                if(selectedPiece.posX == 2)
                 {
                     availablePositions[2] = selectedPiece.posX + 2;
                     availablePositions[3] = selectedPiece.posY;

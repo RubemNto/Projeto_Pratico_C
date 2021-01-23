@@ -6,18 +6,12 @@
 
 int main(void)
 {
-    bool playing = true;
-    // createPlayers();
-    // setWhite();    
-    // loadGame();
-    //createTable();
     startMenu();
-    while(playing)
+    while(true)
     {        
         saveGame();
         confirmContinueGame();
-        movePiece();        
-        //checkKing(turn)
+        movePiece();
     }    
     return 0;
 }
