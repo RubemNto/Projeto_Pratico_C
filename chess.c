@@ -296,7 +296,6 @@ void loadTable(piece _pieces1[], piece _pieces2[], player tempPlayers[], int vez
 
     for(int i = 0; i < 16; i++){
 
-
         pieces1[i].costume = _pieces1[i].costume;
         pieces1[i].posX = _pieces1[i].posX;
         pieces1[i].posY = _pieces1[i].posY;
@@ -304,16 +303,6 @@ void loadTable(piece _pieces1[], piece _pieces2[], player tempPlayers[], int vez
         pieces2[i].costume = _pieces2[i].costume;
         pieces2[i].posX = _pieces2[i].posX;
         pieces2[i].posY = _pieces2[i].posY;
-
-        printf("Posições das peças brancas\n");
-        printf("%c ",pieces1[i].costume);
-        printf("%d ",pieces1[i].posX);
-        printf("%d\n\n",pieces1[i].posY);
-        printf("Posições das peças \n");
-        printf("%c ",pieces2[i].costume);
-        printf("%d ",pieces2[i].posX);
-        printf("%d\n\n",pieces2[i].posY);
-
     }
 
 
@@ -326,13 +315,12 @@ char lookForPiece(int posX, int posY){
 
         if(i < 16){
 
-            //printf("%d %d", pieces1[i].posX , pieces1[i].posY - 64);
             if(pieces1[i].posX == posX && pieces1[i].posY == posY){
 
                 return pieces1[i].costume;
             }
         }else{
-            //printf("%d %d", pieces2[i-16].posX , pieces2[i-16].posY - 64);
+            
             if(pieces2[i-16].posX == posX && pieces2[i-16].posY == posY ){
 
                 return pieces2[i-16].costume;
@@ -369,46 +357,6 @@ void reCreateTable()//recreates the table given the positions of the pieces in t
         printf("\n");
     }    
 }
-
-/*void reCreateTable()//recreates the table given the positions of the pieces in the table if the match 
-{
-    bool foundPiece;
-    system("cls");
-    printf("   A");
-    for (int i = 'B'; i <= 'H'; i++)
-    {
-        printf("  %c",i);
-    }
-    printf("\n");
-    
-    for (int l = 1; l <= 8; l++)
-    {
-        printf("%d ", l);
-        for (int c = 65; c <= 72; c++)
-        {
-            for(int p = 0; p < 16; p++)
-            {
-                if(pieces1[p].posX == l && pieces1[p].posY == c)
-                {
-                    printf("[%c]",pieces1[p].costume);
-                    foundPiece = true;
-                    break;
-                }else if(pieces2[p].posX == l && pieces2[p].posY == c)
-                {
-                    printf("[%c]",pieces2[p].costume);
-                    foundPiece = true;
-                    break;                    
-                }              
-            }
-            if(foundPiece == false)
-            {
-                printf("[ ]");
-            }
-            foundPiece = false;                                    
-        }
-        printf("\n");
-    }    
-}*/
 
 void confirmContinueGame()//check if game must go on
 {

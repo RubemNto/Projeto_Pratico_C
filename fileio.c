@@ -22,6 +22,7 @@ void loadGame()
 	piece tempPieces1[16];
 	piece tempPieces2[16];
 	player tempPlayers[2];
+	_flushall();
 	printf("Write location of data file: ");
 	gets(fileLocation);
 
