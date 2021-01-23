@@ -13,7 +13,7 @@ typedef struct
 }player;
 
 void createTable();
-void loadTable(piece _pieces1[], piece _pieces2[]);
+//void loadTable(piece _pieces1[], piece _pieces2[]);
 void reCreateTable();
 void writeRandom();
 void writeCoordinatesOfPieces(FILE *savedData);
@@ -24,4 +24,12 @@ void createPlayers();
 void setWhite();
 void checkGame();
 void setUpPieces();
+
+void movePawn(piece selectedPiece,int index,int posX,char posY);
+void moveRook(piece selectedPiece,int index,int posX,char posY);
+void moveKnight(piece selectedPiece,int index,int posX,char posY);
+void moveBishop(piece selectedPiece,int index,int posX,char posY);
+void moveQueen(piece selectedPiece,int index,int posX,char posY);
+void moveKing(piece selectedPiece,int index,int posX,char posY);
+
 

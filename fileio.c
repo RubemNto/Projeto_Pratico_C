@@ -42,6 +42,7 @@ void saveGame()
 	fclose(gameData);
 }
 
+<<<<<<< HEAD
 void loadGame()
 {
 	char fileLocation[200] = "";
@@ -66,34 +67,62 @@ void loadGame()
 			fgetc(fp);
 			fscanf(fp," %c",&(tempPieces1[i].posY)); 
 			fgetc(fp);
+=======
+// void loadGame()
+// {
+// 	char fileLocation[200] = "";
+// 	char data[67][6];
+// 	piece tempPieces1[16];
+// 	piece tempPieces2[16];
+// 	char LIXO[20];
+// 	printf("Write location of data file: ");
+// 	gets(fileLocation);
+
+// 	FILE *fp = fopen(fileLocation,"r");
+// 	if(fp == NULL)
+// 	{
+// 		printf("Error!");   
+// 		exit(1);             
+// 	}else
+// 	{
+// 		int counter;
+// 		for (int i = 0; i < 16; i++)
+// 		{
+// 			fscanf(fp," %c",&(tempPieces1[i].costume)); 
+// 			fgetc(fp);
+// 			fscanf(fp,"%d",&(tempPieces1[i].posX)); 
+// 			fgetc(fp);
+// 			fscanf(fp," %c",&(tempPieces1[i].posY)); 
+// 			fgetc(fp);
+>>>>>>> 055240718f8ebbe2fc9dc4b116f71be29ec43143
 
 			
-			//printf("%c",tempPieces1[i].costume);
-			//printf("\n");
-			//printf("%d \n",tempPieces1[i].posX);
+// 			//printf("%c",tempPieces1[i].costume);
+// 			//printf("\n");
+// 			//printf("%d \n",tempPieces1[i].posX);
 		
 
-		}
-		fgetc(fp);
-		for (int i = 0; i < 16; i++)
-		{
-			fscanf(fp," %c",&(tempPieces2[i].costume)); 
-			fgetc(fp);
-			fscanf(fp,"%d",&(tempPieces2[i].posX)); 
-			fgetc(fp);
-			fscanf(fp,"%c",&(tempPieces2[i].posY)); 
-			fgetc(fp);
+// 		}
+// 		fgetc(fp);
+// 		for (int i = 0; i < 16; i++)
+// 		{
+// 			fscanf(fp," %c",&(tempPieces2[i].costume)); 
+// 			fgetc(fp);
+// 			fscanf(fp,"%d",&(tempPieces2[i].posX)); 
+// 			fgetc(fp);
+// 			fscanf(fp,"%c",&(tempPieces2[i].posY)); 
+// 			fgetc(fp);
 
-			//printf("%c",tempPieces2[i].costume);
-			//printf("\n");
-			//printf("%d \n",tempPieces2[i].posX);
+// 			//printf("%c",tempPieces2[i].costume);
+// 			//printf("\n");
+// 			//printf("%d \n",tempPieces2[i].posX);
 		
-		}
+// 		}
 
-		loadTable(tempPieces1, tempPieces2);
+// 		loadTable(tempPieces1, tempPieces2);
 		
 						
-	}
-	fclose(fp);
+// 	}
+// 	fclose(fp);
 	
-}
+// }
