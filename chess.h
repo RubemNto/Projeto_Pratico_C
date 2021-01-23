@@ -23,7 +23,6 @@ void movePiece();
 void createPlayers();
 void setWhite();
 void checkGame();
-void setUpPieces();
 
 void movePawn(piece selectedPiece,int index,int posX,char posY);
 void moveRook(piece selectedPiece,int index,int posX,char posY);

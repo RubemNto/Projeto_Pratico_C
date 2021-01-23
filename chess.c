@@ -13,7 +13,6 @@ piece pieces2[16];//pretos
 
 player players[2];
 bool whiteTurn = true;
-bool winW,winB;
 
 int random;
 void writeRandom()
@@ -21,29 +20,24 @@ void writeRandom()
     printf("%d",random);
 }
 
-void writeCoordinatesOfPieces(FILE *savedData)
+void writeCoordinatesOfPieces(FILE *savedData)//writes the coordinates of pieces in game in a txt file
 {
     for (int i = 0; i < 16; i++)
     {
         fprintf(&*savedData,"%c %d %c\n",pieces1[i].costume,pieces1[i].posX,pieces1[i].posY);
-        // fprintf("%c %d %c",pieces1[i].costume,pieces1[i].posX,pieces1[i].posY);
-        // fprintf("\n");
     }
     fprintf(&*savedData,"\n");
     for (int i = 0; i < 16; i++)
     {
         fprintf(&*savedData,"%c %d %c\n",pieces2[i].costume,pieces2[i].posX,pieces2[i].posY);
-        // fprintf("%c %d %c",pieces2[i].costume,pieces2[i].posX,pieces2[i].posY);
-        // fprintf("\n");
     }
     fprintf(&*savedData,"\n");
 }
 
-void writePlayerTurn(FILE *savedData)
+void writePlayerTurn(FILE *savedData)//writes the game turn in game file
 {
     fprintf(&*savedData,"%d",whiteTurn);
 }
-
 
 void createPlayers(){
                             //CYCLE TO REQUEST FOR PLAYER'S NICKNAME AND STORE IT IN """THE PLAYERSLIST"""
@@ -69,7 +63,7 @@ void createPlayers(){
 }
 
 //--------------------   FUNCTION TO INFORM THE PLAYERS OF WHO PLAYS FIRST/ IS WHITE  ------------------//
-void checkGame()
+void checkGame()//check if game is over by checking if the king still exists in game
 {    
     bool foundKingW;
     bool foundKingB;
@@ -86,18 +80,17 @@ void checkGame()
         if(pieces2[i].costume == 'k')
         {
             foundKingB = true;
+            break;
         }
     }
     
     if(foundKingW && !foundKingB)
     {
-        winB = false;
-        winW = true;
+        printf("%s won the match\nCongratulations!",players[0].nickname);
     }
     else if(!foundKingW && foundKingB)
     {
-        winW = false;
-        winB = true;
+        printf("%s won the match\nCongratulations!",players[1].nickname);
     }    
 }
 
@@ -130,14 +123,10 @@ void setWhite(){
     }
 }
 
-void createTable()
+void createTable()//creates a new game table with new pieces and positions
 {
     srand(time(0));
-    random = rand()%2;
-    //creates a random table of black and white chess pieces represented 
-    //by lower case and upper case characters respectively on the 8x8 board
-    // piece pieces1[16];
-    // piece pieces2[16];
+    random = rand()%2;    
     char costumes[9] = {'p','r','n','b','q','k','b','n','r'};
     if(random == 0)
     {
@@ -252,7 +241,7 @@ void createTable()
     }
 }
 
-void reCreateTable()
+void reCreateTable()//recreates the table given the positions of the pieces in the table if the match 
 {
     bool foundPiece;
     system("cls");
@@ -292,21 +281,17 @@ void reCreateTable()
     }    
 }
 
-void setUpPieces()
-{
-    
-}
-
 void movePiece()
 {
-    int index = 0;
+    int index = 0;//index of selected piece
     int posX = 0;//select piece line
     char posY = 0;//select piece column
     char selectedPieceCostume = ' ';
     char answer = 0;
     piece selectedPiece;
     bool choose = false;
-    //select piece
+
+//select piece
     //receive coordinates from the table and verify if exists in the table
     if(whiteTurn == true)
     {
