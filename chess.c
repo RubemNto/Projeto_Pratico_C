@@ -441,6 +441,7 @@ void movePiece()
         else if(selectedPiece.costume == 'q' || selectedPiece.costume == 'Q')//movement of Queen
         {
             //-> moves at any direction as many spaces as needed
+            moveQueen(selectedPiece,index,posX,posY);
         }
         else if(selectedPiece.costume == 'k' || selectedPiece.costume == 'K')//movement of King
         {
@@ -1720,13 +1721,13 @@ void moveQueen(piece selectedPiece,int index,int posX,char posY)//done
                 {
                     if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
                     {
-                        // printf("Found Piece Down\n");
-                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        printf("Found Piece Down\n");
+                        printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
                         foundPiece = true;
                     }else if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
                     {
-                        // printf("Found Piece Down\n");
-                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        printf("Found Piece Down\n");
+                        printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
                         availablePositionsDiagonal1Down[i][0] = selectedPiece.posX+(i+1);
                         availablePositionsDiagonal1Down[i][1] = selectedPiece.posY-(i+1);
                         foundPiece = true;
@@ -1736,13 +1737,13 @@ void moveQueen(piece selectedPiece,int index,int posX,char posY)//done
                 {
                     if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
                     {
-                        // printf("Found Piece Down\n");
-                        // printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
+                        printf("Found Piece Down\n");
+                        printf("%c %d %c\n",pieces2[p].costume,pieces2[p].posX,pieces2[p].posY);
                         foundPiece = true;                        
                     }else if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY-(i+1) && foundPiece == false)
                     {
-                        // printf("Found Piece Down\n");
-                        // printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
+                        printf("Found Piece Down\n");
+                        printf("%c %d %c\n",pieces1[p].costume,pieces1[p].posX,pieces1[p].posY);
                         availablePositionsDiagonal1Down[i][0] = selectedPiece.posX+(i+1);
                         availablePositionsDiagonal1Down[i][1] = selectedPiece.posY-(i+1);
                         foundPiece = true;
