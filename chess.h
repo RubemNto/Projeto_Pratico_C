@@ -12,6 +12,7 @@ typedef struct
     char nickname[12];
 }player;
 
+void startMenu();
 void createTable();
 //void loadTable(piece _pieces1[], piece _pieces2[]);
 void reCreateTable();
@@ -20,6 +21,7 @@ void writeCoordinatesOfPieces(FILE *savedData);
 void writePlayerTurn(FILE *savedData);
 void loadTable(piece _pieces1[], piece _pieces2[]);
 void movePiece();
+void confirmContinueGame();
 
 void createPlayers();
 void setWhite();

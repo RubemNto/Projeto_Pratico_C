@@ -15,6 +15,38 @@ player players[2];
 bool whiteTurn = true;
 
 int random;
+
+void startMenu()
+{
+    int answer;
+    do
+    {
+        printf("Chess game EDJD 2021\n\n");
+        printf("1 - Start new game\n");
+        printf("2 - Load existing game\n");
+        printf("3 - quit\n");
+        printf("answer: ");
+        scanf(" %d",&answer);
+        if(answer > 3 || answer < 1)
+        {
+            printf("Not valid answer!");
+        }
+    }while (answer > 3 || answer < 1);
+
+    if(answer == 1)
+    {
+        createTable();
+    }else if (answer == 2)
+    {
+        loadTable(&*pieces1,&*pieces2);
+    }else
+    {
+        printf("Thanks for playing!\n");
+        exit(1);
+    }
+    
+}
+
 void writeRandom()
 {
     printf("%d",random);
@@ -63,6 +95,7 @@ void createPlayers(){
 }
 
 //--------------------   FUNCTION TO INFORM THE PLAYERS OF WHO PLAYS FIRST/ IS WHITE  ------------------//
+
 void checkGame()//check if game is over by checking if the king still exists in game
 {    
     bool foundKingW;
@@ -317,6 +350,26 @@ void reCreateTable()//recreates the table given the positions of the pieces in t
     }    
 }
 
+void confirmContinueGame()//check if game must go on
+{
+    char answer = ' ';
+    printf("End the match?(Y/N)\n");
+    scanf(" %c",&answer);
+    answer = toupper(answer);
+    do
+    {    
+        if(answer == 'Y')
+        {
+            printf("Match has stopped\n");
+            exit(1);
+        }
+        else if(answer != 'Y' && answer != 'N')
+        {
+            printf("Not valid answer!\n");
+        }
+    } while (answer != 'Y' && answer != 'N');    
+}
+
 void movePiece()
 {
     int index = 0;//index of selected piece
@@ -470,6 +523,7 @@ void movePiece()
             moveKing(selectedPiece,index,posX,posY);
         }
         
+        checkGame();
         reCreateTable();
         whiteTurn = !whiteTurn;    
 }

@@ -10,10 +10,12 @@ int main(void)
     // createPlayers();
     // setWhite();    
     // loadGame();
-    createTable();
+    //createTable();
+    startMenu();
     while(playing)
     {        
-       // saveGame();
+        saveGame();
+        confirmContinueGame();
         movePiece();
         //checkKing(turn)
     }    
