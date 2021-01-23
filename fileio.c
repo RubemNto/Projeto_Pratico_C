@@ -39,6 +39,7 @@ void saveGame()
 	gameData = fopen("GameData.txt","w");
 	writeCoordinatesOfPieces(gameData);
 	writePlayerTurn(gameData);
+	//writePlayersNickname(gameData);
 	fclose(gameData);
 }
 
@@ -49,7 +50,6 @@ void loadGame()
 	char data[67][6];
 	piece tempPieces1[16];
 	piece tempPieces2[16];
-	char LIXO[20];
 	printf("Write location of data file: ");
 	gets(fileLocation);
 

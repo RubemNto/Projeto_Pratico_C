@@ -18,6 +18,7 @@ void reCreateTable();
 void writeRandom();
 void writeCoordinatesOfPieces(FILE *savedData);
 void writePlayerTurn(FILE *savedData);
+//void writePlayersNickname(FILE *savedData);
 void movePiece();
 
 void createPlayers();
