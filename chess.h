@@ -18,12 +18,12 @@ void reCreateTable();
 void writeRandom();
 void writeCoordinatesOfPieces(FILE *savedData);
 void writePlayerTurn(FILE *savedData);
+void loadTable(piece _pieces1[], piece _pieces2[]);
 void movePiece();
 
 void createPlayers();
 void setWhite();
 void checkGame();
-void loadTable(piece _pieces1[], piece _pieces2[]);
 
 void movePawn(piece selectedPiece,int index,int posX,char posY);
 void moveRook(piece selectedPiece,int index,int posX,char posY);
